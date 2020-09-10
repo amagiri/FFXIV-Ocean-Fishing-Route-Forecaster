@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>FFXIV Ocean Fishing Route Forecaster</title>
+		<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+		
+		<link rel="stylesheet" href="main.css">
+
+		<script>let $ = require('jquery');</script>
+	</head>
+	<body>
+		<h2>FFXIV Ocean Fishing Route Forecaster</h2>
+		Credit to <a href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis 
+		<form id="routeForm">
+			<h3>Select Conditions</h3>
+			<ul>
+				<li>
+					<input type="checkbox" id="sunsetMerlthor" checked>
+					<label for="sunsetMerlthor">Northern by Sunset (Dragon)</label>
+				</li>
+				<li>
+					<input type="checkbox" id="sunsetRhotano" checked>
+					<label for="sunsetRhotano">Rhotano by Sunset (Blue-4)</label>
+				</li>
+				<li>
+					<input type="checkbox" id="nightMerlthor" checked>
+					<label for="nightMerlthor">Northern by Night (Octo)</label>
+				</li>
+				<li>
+					<input type="checkbox" id="nightRhotano" checked>
+					<label for="nightRhotano">Rhotano by Night (Jelly)</label>
+				</li>
+				<li>				
+					<input type="checkbox" id="dayMerlthor" checked>
+					<label for="dayMerlthor">Northern by Day (Blue-3)</label>
+				</li>
+				<li>
+					<input type="checkbox" id="dayRhotano" checked>
+					<label for="dayRhotano">Rhotano by Day (Shark)</label>
+				</li>
+			</ul>
+
+			<h3>Select Dates</h3>
+			<div>
+				<div class="dateOption">
+					<label for="dateFrom">From: </label>
+					<input type="datetime-local" id="dateFrom">
+				</div>
+				<div class="dateOption">
+					<label for="dateTo">To:</label>
+					<input type="datetime-local" id="dateTo">
+				</div>
+			</div>
+		</form>
+
+		<button type="submit" id="formSubmit" form="routeForm">Find Routes</button>
+
+		<div id="results">
+			<table>
+				<thead>
+					<tr>
+						<th>Route</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+	</body>
+
+	<script type="text/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+</html>

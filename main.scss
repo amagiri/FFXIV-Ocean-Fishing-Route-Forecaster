@@ -1,0 +1,36 @@
+body {
+    text-align: center;
+}
+
+ul {
+    columns: 3;
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    text-align: left;
+    margin: auto;
+    margin-bottom: 2rem;
+    max-width: 760px;
+}
+
+li {
+    list-style-type: none;
+}
+
+form {
+    margin: auto;
+    padding: 0.5rem;
+}
+
+.dateOption {
+    display: inline-block;
+    margin: 0 2rem;
+}
+
+input[type="submit"] {
+    margin: 2rem 0;
+}
+
+#results {
+    width: 100%;
+    display: flex;
+}
