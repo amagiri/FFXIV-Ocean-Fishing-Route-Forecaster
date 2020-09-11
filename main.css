@@ -36,4 +36,14 @@ input[type="submit"] {
   display: -ms-flexbox;
   display: flex;
 }
+
+table {
+  padding: 40px;
+  margin: auto;
+}
+
+td, th {
+  min-width: 30%;
+  padding: 0.2rem 1rem;
+}
 /*# sourceMappingURL=main.css.map */
