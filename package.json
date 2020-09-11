@@ -22,8 +22,9 @@
   },
   "dependencies": {
     "@types/jquery": "^3.5.1",
+    "common.js": "^1.1.1",
+    "commonjs": "0.0.1",
     "datetime-locale": "^1.0.0",
-    "electron": "^10.1.1",
     "jquery": "^3.5.1"
   }
 }

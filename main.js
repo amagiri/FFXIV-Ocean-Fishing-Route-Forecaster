@@ -1,7 +1,13 @@
-var datetimeLocale = require('datetime-locale');
+"use strict";
+exports.__esModule = true;
+var name = require("datetime-locale");
+var test = name.toString();
+var test2 = name.fromString();
 var routeList = new Array();
 var refRoute;
-window.onload = function () {
+alert('Main code');
+(function () {
+    alert('IIFE');
     var routesURL = 'json/routes.json';
     var routesRequest = new XMLHttpRequest();
     routesRequest.overrideMimeType("application/json");
@@ -22,17 +28,7 @@ window.onload = function () {
         refRoute = getRouteByKey('sunsetMerlthor', routeList);
         refRoute.datetime = new Date("2020-09-03T16:00:00Z");
     };
-    var fromDate = new Date();
-    var displayFromDate = datetimeLocale.toString(fromDate);
-    displayFromDate = displayFromDate.slice(0, displayFromDate.lastIndexOf(":"));
-    $('#dateFrom').val(displayFromDate);
-    var toDate = fromDate;
-    var addedDays = 7;
-    toDate.setDate(toDate.getDate() + addedDays);
-    var displayToDate = datetimeLocale.toString(toDate);
-    displayToDate = displayToDate.slice(0, displayToDate.lastIndexOf(":"));
-    $('#dateTo').val(displayToDate);
-};
+})();
 function formValidation() {
     var inputCheck = false;
     $('input[type="checkbox"]').each(function () {

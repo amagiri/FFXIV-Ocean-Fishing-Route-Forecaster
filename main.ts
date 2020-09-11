@@ -1,12 +1,18 @@
-const datetimeLocale = require('datetime-locale');  // Dependency
+import datetimeLocale from "datetime-locale";
 
 var routeList: Route[] = new Array();
 
 // Create a baseline Route that everything else will be calculated off of
 var refRoute: Route; 
 
-window.onload = function() {
-    // Import route JSON
+alert('Main code');
+
+/* SETUP */
+// Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first
+(function() {
+    alert('IIFE');
+
+    // Import route options JSON
     var routesURL = 'json/routes.json';
     var routesRequest = new XMLHttpRequest();
     routesRequest.overrideMimeType("application/json");
@@ -43,7 +49,7 @@ window.onload = function() {
     displayToDate = displayToDate.slice(0, displayToDate.lastIndexOf(":"));   // Remove seconds from string
     $('#dateTo').val(displayToDate);
 
-}
+})();
 
 function formValidation() {
     // If no checkboxes are selected, return an error
