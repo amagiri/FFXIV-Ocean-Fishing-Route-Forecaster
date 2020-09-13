@@ -1,12 +1,15 @@
 {
 	"compilerOptions": {
-	  "module": "commonjs",
-	  "noImplicitAny": true,
-	  "removeComments": true,
-	  "preserveConstEnums": true,
-	  "sourceMap": true
+		"module": "CommonJS",
+		"esModuleInterop": true,
+	  	"allowSyntheticDefaultImports": true,
+		"noImplicitAny": true,
+	  	"removeComments": true,
+	  	"preserveConstEnums": true,
+		"sourceMap": true,
+		"outDir": "site"
 	},
 	"files": [
-	  "main.ts",
+		"src/main.ts",
 	]
 }

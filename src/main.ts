@@ -1,19 +1,13 @@
-import datetimeLocale from "datetime-locale";
-
 var routeList: Route[] = new Array();
 
 // Create a baseline Route that everything else will be calculated off of
 var refRoute: Route; 
 
-alert('Main code');
-
 /* SETUP */
 // Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first
 (function() {
-    alert('IIFE');
-
     // Import route options JSON
-    var routesURL = 'json/routes.json';
+    var routesURL = 'data/routes.json';
     var routesRequest = new XMLHttpRequest();
     routesRequest.overrideMimeType("application/json");
     routesRequest.open('GET', routesURL);
@@ -33,20 +27,17 @@ alert('Main code');
         });
 
         refRoute = getRouteByKey('sunsetMerlthor', routeList);   // Anchor route is Northern Strait of Merlthor at sunset
-        refRoute.datetime = new Date("2020-09-03T16:00:00Z"); // Anchor time is currently September 3, 2020 at 9am PDT
+        refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z"); // Anchor time is currently September 3, 2020 at 9am PDT
     };
 
     // Generate default from and to dates
-    const fromDate = new Date();
-    var displayFromDate: string = datetimeLocale.toString(fromDate);  
-    displayFromDate = displayFromDate.slice(0, displayFromDate.lastIndexOf(":"));   // Remove seconds from string
+    const fromDate = dayjs();
+    var displayFromDate: string = fromDate.format('YYYY-MM-DD[T]HH:mm');
     $('#dateFrom').val(displayFromDate);
 
-    var toDate = fromDate;
-    const addedDays = 7;
-    toDate.setDate(toDate.getDate() + addedDays); 
-    var displayToDate: string = datetimeLocale.toString(toDate);  
-    displayToDate = displayToDate.slice(0, displayToDate.lastIndexOf(":"));   // Remove seconds from string
+    const addedDays = 7; 
+    var toDate = fromDate.add(addedDays, 'day');
+    var displayToDate: string = toDate.format('YYYY-MM-DD[T]HH:mm');
     $('#dateTo').val(displayToDate);
 
 })();
@@ -65,6 +56,18 @@ function formValidation() {
     }
 
     // Browser seems to check if datetime-local is filled correctly, so I won't touch on that.
+    // Check if start time is larger than end time
+    const inputTimespan: Period = getDateInputs();
+    if (inputTimespan.end.diff(inputTimespan.start) < 0) {
+        alert('Start time is larger than end time.')
+        return false;
+    }
+
+    if (inputTimespan.start.diff(refRoute.datetime) < 0) {
+        alert('This date is not supported.');
+        return false;
+    }
+
     return inputCheck;
 }
 
@@ -83,12 +86,12 @@ function getSpecifiedRoutes() {
 // Finds all routes
 function findAllRoutes(timespan: Period) {
     var outputRoutes: Route[] = new Array();
-    var currentTime: Date = timespan.start;
+    var currentTime: Dayjs = timespan.start;
 
-    while (timespan.end.getTime() - currentTime.getTime() > 0) {
+    while (timespan.end.diff(currentTime) > 0) {
         outputRoutes.push(getRoute(refRoute, currentTime));
 
-        currentTime.setHours(currentTime.getHours() + 2);   // Move forward two hours
+        currentTime = currentTime.add(2, 'hour');   // Move forward two hours
     } 
 
     return outputRoutes;
@@ -117,37 +120,38 @@ function getRouteInputs() {
 }
 
 function getDateInputs() {
-    const startDatetime = new Date($('#dateFrom').val().toString());
-    const endDatetime = new Date($('#dateTo').val().toString());
+    // These will not have seconds/millisecond values
+    const startDatetime = dayjs($('#dateFrom').val().toString());
+    const endDatetime = dayjs($('#dateTo').val().toString());
 
     return new Period(startDatetime, endDatetime);
 }
 
 function adjustTimespan(refRoute: Route, timespan: Period) {
     // Round start period up to the nearset hour
-    timespan.start.setMinutes(0);   
-    timespan.start.setHours(timespan.start.getHours() + 1);  
+    timespan.start = timespan.start.minute(0);   
+    timespan.start = timespan.start.add(1, 'hour');  
     // If num in setHours(num) exceeds 23, the day will increment, so I will not check for overflow
     // Likewise if it is less than 0, the day will decrement
 
-    timespan.end.setMinutes(0); // Round end period down
+    timespan.end = timespan.end.minute(0); // Round end period down
 
     // Adjust start and end times as necessary so that they are in increments of 2 from the reference
-    const refHour = refRoute.datetime.getHours();
+    const refHour = refRoute.datetime.hour();
 
-    if (((timespan.start.getHours() - refHour) % 2) != 0) {
-        timespan.start.setHours(timespan.start.getHours() + 1); // Increment one hour if the difference is odd
+    if (((timespan.start.hour() - refHour) % 2) != 0) {
+        timespan.start = timespan.start.add(1, 'hour'); // Increment one hour if the difference is odd
     }
 
-    if (((timespan.end.getHours() - refHour) % 2) != 0) {
-        timespan.end.setHours(timespan.end.getHours() - 1); // Decrement one hour if the difference is odd
+    if (((timespan.end.hour() - refHour) % 2) != 0) {
+        timespan.end = timespan.end.subtract(1, 'hour'); // Decrement one hour if the difference is odd
     }
 
     return;
 }
 
-function getRoute(refRoute: Route, inputTime: Date) {
-    const timeElapsed: number = inputTime.getTime() - refRoute.datetime.getTime();
+function getRoute(refRoute: Route, inputTime: Dayjs) {
+    const timeElapsed: number = inputTime.diff(refRoute.datetime);
     const hourConversion = 1000 * 60 * 60;
     const totalHours = timeElapsed/hourConversion;  // This should always be a whole number due to our earlier rounding
 
@@ -207,7 +211,7 @@ function getRoute(refRoute: Route, inputTime: Date) {
     }
 
     var currentRoute = getRouteByNameTime(hourlyRoute, hourlyTime);
-    currentRoute.datetime = new Date(inputTime);
+    currentRoute.datetime = dayjs(inputTime);
 
     return currentRoute;
 }
@@ -217,8 +221,10 @@ function displayRoutes(routeList: Route[]) {
     $results.text('');  // Clear out old results
 
     routeList.forEach((route) => {
+        const jsDate: Date = route.datetime.toDate();
+
         const $routeCell = $('<td></td>').text(route.routeName);
-        const $timeCell = $('<td></td>').text(route.datetime.toString());
+        const $timeCell = $('<td></td>').text(jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'}));
         const $row = $('<tr></tr>').append($routeCell).append($timeCell);
         $results.append($row);
     })
@@ -256,7 +262,7 @@ class Route {
     routeTime: string;
     routeType: string;
     key: string;
-    datetime: Date;
+    datetime: Dayjs;
 
     constructor(name: string, time: string, type: string, key: string) {
         this.routeName = name;
@@ -267,10 +273,10 @@ class Route {
 }
 
 class Period {
-    start: Date;
-    end: Date;
+    start: Dayjs;
+    end: Dayjs;
 
-    constructor(start: Date, end: Date) {
+    constructor(start: Dayjs, end: Dayjs) {
         this.start = start;
         this.end = end;
     }

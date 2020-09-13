@@ -2,10 +2,8 @@
   "name": "repository",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "electron ."
-  },
+  "main": "site/index.html",
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster.git"
@@ -17,14 +15,14 @@
   },
   "homepage": "https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster#readme",
   "devDependencies": {
-    "typescript": "^4.0.2",
-    "sass": "^1.26.10"
+    "sass": "^1.26.10",
+    "typescript": "^4.0.2"
   },
   "dependencies": {
     "@types/jquery": "^3.5.1",
-    "common.js": "^1.1.1",
-    "commonjs": "0.0.1",
-    "datetime-locale": "^1.0.0",
-    "jquery": "^3.5.1"
+    "@types/node": "^14.10.1",
+    "dayjs": "^1.8.35",
+    "jquery": "^3.5.1",
+    "tabler-icons": "^1.19.0"
   }
 }

@@ -1,14 +1,7 @@
-"use strict";
-exports.__esModule = true;
-var name = require("datetime-locale");
-var test = name.toString();
-var test2 = name.fromString();
 var routeList = new Array();
 var refRoute;
-alert('Main code');
 (function () {
-    alert('IIFE');
-    var routesURL = 'json/routes.json';
+    var routesURL = 'data/routes.json';
     var routesRequest = new XMLHttpRequest();
     routesRequest.overrideMimeType("application/json");
     routesRequest.open('GET', routesURL);
@@ -26,8 +19,15 @@ alert('Main code');
             routeList.push(reference);
         });
         refRoute = getRouteByKey('sunsetMerlthor', routeList);
-        refRoute.datetime = new Date("2020-09-03T16:00:00Z");
+        refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z");
     };
+    var fromDate = dayjs();
+    var displayFromDate = fromDate.format('YYYY-MM-DD[T]HH:mm');
+    $('#dateFrom').val(displayFromDate);
+    var addedDays = 7;
+    var toDate = fromDate.add(addedDays, 'day');
+    var displayToDate = toDate.format('YYYY-MM-DD[T]HH:mm');
+    $('#dateTo').val(displayToDate);
 })();
 function formValidation() {
     var inputCheck = false;
@@ -38,6 +38,15 @@ function formValidation() {
     if (!inputCheck) {
         alert('No routes selected.');
         return inputCheck;
+    }
+    var inputTimespan = getDateInputs();
+    if (inputTimespan.end.diff(inputTimespan.start) < 0) {
+        alert('Start time is larger than end time.');
+        return false;
+    }
+    if (inputTimespan.start.diff(refRoute.datetime) < 0) {
+        alert('This date is not supported.');
+        return false;
     }
     return inputCheck;
 }
@@ -52,9 +61,9 @@ function getSpecifiedRoutes() {
 function findAllRoutes(timespan) {
     var outputRoutes = new Array();
     var currentTime = timespan.start;
-    while (timespan.end.getTime() - currentTime.getTime() > 0) {
+    while (timespan.end.diff(currentTime) > 0) {
         outputRoutes.push(getRoute(refRoute, currentTime));
-        currentTime.setHours(currentTime.getHours() + 2);
+        currentTime = currentTime.add(2, 'hour');
     }
     return outputRoutes;
 }
@@ -76,25 +85,25 @@ function getRouteInputs() {
     return selectedRoutes;
 }
 function getDateInputs() {
-    var startDatetime = new Date($('#dateFrom').val().toString());
-    var endDatetime = new Date($('#dateTo').val().toString());
+    var startDatetime = dayjs($('#dateFrom').val().toString());
+    var endDatetime = dayjs($('#dateTo').val().toString());
     return new Period(startDatetime, endDatetime);
 }
 function adjustTimespan(refRoute, timespan) {
-    timespan.start.setMinutes(0);
-    timespan.start.setHours(timespan.start.getHours() + 1);
-    timespan.end.setMinutes(0);
-    var refHour = refRoute.datetime.getHours();
-    if (((timespan.start.getHours() - refHour) % 2) != 0) {
-        timespan.start.setHours(timespan.start.getHours() + 1);
+    timespan.start = timespan.start.minute(0);
+    timespan.start = timespan.start.add(1, 'hour');
+    timespan.end = timespan.end.minute(0);
+    var refHour = refRoute.datetime.hour();
+    if (((timespan.start.hour() - refHour) % 2) != 0) {
+        timespan.start = timespan.start.add(1, 'hour');
     }
-    if (((timespan.end.getHours() - refHour) % 2) != 0) {
-        timespan.end.setHours(timespan.end.getHours() - 1);
+    if (((timespan.end.hour() - refHour) % 2) != 0) {
+        timespan.end = timespan.end.subtract(1, 'hour');
     }
     return;
 }
 function getRoute(refRoute, inputTime) {
-    var timeElapsed = inputTime.getTime() - refRoute.datetime.getTime();
+    var timeElapsed = inputTime.diff(refRoute.datetime);
     var hourConversion = 1000 * 60 * 60;
     var totalHours = timeElapsed / hourConversion;
     var daysElapsed = Math.floor(totalHours / 24);
@@ -148,15 +157,16 @@ function getRoute(refRoute, inputTime) {
             break;
     }
     var currentRoute = getRouteByNameTime(hourlyRoute, hourlyTime);
-    currentRoute.datetime = new Date(inputTime);
+    currentRoute.datetime = dayjs(inputTime);
     return currentRoute;
 }
 function displayRoutes(routeList) {
     var $results = $('#results tbody');
     $results.text('');
     routeList.forEach(function (route) {
+        var jsDate = route.datetime.toDate();
         var $routeCell = $('<td></td>').text(route.routeName);
-        var $timeCell = $('<td></td>').text(route.datetime.toString());
+        var $timeCell = $('<td></td>').text(jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' }));
         var $row = $('<tr></tr>').append($routeCell).append($timeCell);
         $results.append($row);
     });
