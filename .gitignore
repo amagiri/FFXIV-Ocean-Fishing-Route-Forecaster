@@ -2,3 +2,5 @@
 node_modules/
 *.pak
 *.exe
+*.map
+*.env

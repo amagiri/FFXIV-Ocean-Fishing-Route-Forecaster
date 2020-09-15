@@ -1,6 +1,6 @@
-var routeList = new Array();
-var refRoute;
-(function () {
+export var routeList = new Array();
+export var refRoute;
+export function setup() {
     var routesURL = 'data/routes.json';
     var routesRequest = new XMLHttpRequest();
     routesRequest.overrideMimeType("application/json");
@@ -9,85 +9,32 @@ var refRoute;
     routesRequest.onload = function () {
         var response = routesRequest.response;
         var parsedRoutes = JSON.parse(response);
-        var routeKeys = Object.keys(parsedRoutes);
-        routeKeys.forEach(function (route) {
-            var name = parsedRoutes[route].routeName;
-            var time = parsedRoutes[route].routeTime;
-            var type = parsedRoutes[route].routeType;
-            var key = route;
-            var reference = new Route(name, time, type, key);
-            routeList.push(reference);
-        });
-        refRoute = getRouteByKey('sunsetMerlthor', routeList);
-        refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z");
+        importRoutes(routeList, parsedRoutes);
+        refRoute = setAnchor(routeList, refRoute);
+        return;
     };
-    var fromDate = dayjs();
-    var displayFromDate = fromDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateFrom').val(displayFromDate);
-    var addedDays = 7;
-    var toDate = fromDate.add(addedDays, 'day');
-    var displayToDate = toDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateTo').val(displayToDate);
-})();
-function formValidation() {
-    var inputCheck = false;
-    $('input[type="checkbox"]').each(function () {
-        if ($(this).prop("checked"))
-            inputCheck = true;
-    });
-    if (!inputCheck) {
-        alert('No routes selected.');
-        return inputCheck;
-    }
-    var inputTimespan = getDateInputs();
-    if (inputTimespan.end.diff(inputTimespan.start) < 0) {
-        alert('Start time is larger than end time.');
-        return false;
-    }
-    if (inputTimespan.start.diff(refRoute.datetime) < 0) {
-        alert('This date is not supported.');
-        return false;
-    }
-    return inputCheck;
 }
-function getSpecifiedRoutes() {
-    var inputKeys = getRouteInputs();
-    var inputTimespan = getDateInputs();
+function importRoutes(routeList, parsedRoutes) {
+    var routeKeys = Object.keys(parsedRoutes);
+    routeKeys.forEach(function (route) {
+        var name = parsedRoutes[route].routeName;
+        var time = parsedRoutes[route].routeTime;
+        var type = parsedRoutes[route].routeType;
+        var key = route;
+        var reference = new Route(name, time, type, key);
+        routeList.push(reference);
+    });
+}
+function setAnchor(routeList, refRoute) {
+    refRoute = getRouteByKey('sunsetMerlthor', routeList);
+    refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z");
+    return refRoute;
+}
+export default function main(refRoute, inputKeys, inputTimespan) {
     adjustTimespan(refRoute, inputTimespan);
     var validRoutes = findAllRoutes(inputTimespan);
     validRoutes = filterRoutes(validRoutes, inputKeys);
-    displayRoutes(validRoutes);
-}
-function findAllRoutes(timespan) {
-    var outputRoutes = new Array();
-    var currentTime = timespan.start;
-    while (timespan.end.diff(currentTime) > 0) {
-        outputRoutes.push(getRoute(refRoute, currentTime));
-        currentTime = currentTime.add(2, 'hour');
-    }
-    return outputRoutes;
-}
-function filterRoutes(routeList, inputKeys) {
-    var filteredRoutes = new Array();
-    routeList.forEach(function (route) {
-        if (inputKeys.includes(route.key)) {
-            filteredRoutes.push(route);
-        }
-    });
-    return filteredRoutes;
-}
-function getRouteInputs() {
-    var selectedRoutes = new Array();
-    $('input[type="checkbox"]').each(function () {
-        if ($(this).prop("checked"))
-            selectedRoutes.push($(this).attr('id'));
-    });
-    return selectedRoutes;
-}
-function getDateInputs() {
-    var startDatetime = dayjs($('#dateFrom').val().toString());
-    var endDatetime = dayjs($('#dateTo').val().toString());
-    return new Period(startDatetime, endDatetime);
+    return validRoutes;
 }
 function adjustTimespan(refRoute, timespan) {
     timespan.start = timespan.start.minute(0);
@@ -101,6 +48,15 @@ function adjustTimespan(refRoute, timespan) {
         timespan.end = timespan.end.subtract(1, 'hour');
     }
     return;
+}
+function findAllRoutes(timespan) {
+    var outputRoutes = new Array();
+    var currentTime = timespan.start;
+    while (timespan.end.diff(currentTime) > 0) {
+        outputRoutes.push(getRoute(refRoute, currentTime));
+        currentTime = currentTime.add(2, 'hour');
+    }
+    return outputRoutes;
 }
 function getRoute(refRoute, inputTime) {
     var timeElapsed = inputTime.diff(refRoute.datetime);
@@ -160,16 +116,14 @@ function getRoute(refRoute, inputTime) {
     currentRoute.datetime = dayjs(inputTime);
     return currentRoute;
 }
-function displayRoutes(routeList) {
-    var $results = $('#results tbody');
-    $results.text('');
+function filterRoutes(routeList, inputKeys) {
+    var filteredRoutes = new Array();
     routeList.forEach(function (route) {
-        var jsDate = route.datetime.toDate();
-        var $routeCell = $('<td></td>').text(route.routeName);
-        var $timeCell = $('<td></td>').text(jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' }));
-        var $row = $('<tr></tr>').append($routeCell).append($timeCell);
-        $results.append($row);
+        if (inputKeys.includes(route.key)) {
+            filteredRoutes.push(route);
+        }
     });
+    return filteredRoutes;
 }
 function getRouteByKey(routeKey, routeList) {
     for (var i = 0; i < routeList.length; i++) {
@@ -186,7 +140,6 @@ function getRouteByNameTime(routeType, routeTime) {
             return route;
         }
     }
-    console.log('bad times here.');
 }
 var Route = (function () {
     function Route(name, time, type, key) {
@@ -197,6 +150,7 @@ var Route = (function () {
     }
     return Route;
 }());
+export { Route };
 var Period = (function () {
     function Period(start, end) {
         this.start = start;
@@ -204,11 +158,4 @@ var Period = (function () {
     }
     return Period;
 }());
-$('#routeForm').submit(function (event) {
-    event.preventDefault();
-    if (!formValidation()) {
-        return;
-    }
-    getSpecifiedRoutes();
-});
-//# sourceMappingURL=main.js.map
+export { Period };

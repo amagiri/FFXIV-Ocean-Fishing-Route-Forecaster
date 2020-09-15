@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
-		"module": "CommonJS",
+		"module": "ES2020",
 		"esModuleInterop": true,
 	  	"allowSyntheticDefaultImports": true,
 		"noImplicitAny": true,
 	  	"removeComments": true,
 	  	"preserveConstEnums": true,
-		"sourceMap": true,
-		"outDir": "site"
+		"sourceMap": false,
+		"outDir": "dist/js",
 	},
 	"files": [
-		"src/main.ts",
+		"src/bot.ts"
 	]
 }

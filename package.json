@@ -1,11 +1,11 @@
 {
-  "name": "repository",
+  "name": "ffxiv-ocean-fishing-route-forecaster",
   "version": "1.0.0",
-  "description": "",
-  "main": "site/index.html",
+  "description": "Outputs the ocean fishing schedule for a date range and routes specified by the user",
+  "main": "namazu",
   "scripts": {},
   "repository": {
-    "type": "git",
+    "type": "module",
     "url": "git+https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster.git"
   },
   "author": "amagiri",
@@ -22,7 +22,7 @@
     "@types/jquery": "^3.5.1",
     "@types/node": "^14.10.1",
     "dayjs": "^1.8.35",
-    "jquery": "^3.5.1",
-    "tabler-icons": "^1.19.0"
+    "discord.js": "^12.3.1",
+    "dotenv": "^8.2.0"
   }
 }
