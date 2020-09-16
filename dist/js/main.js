@@ -53,8 +53,8 @@ function getRouteInputs() {
     return selectedRoutes;
 }
 function getDateInputs() {
-    var startDatetime = dayjs($('#dateFrom').val().toString());
-    var endDatetime = dayjs($('#dateTo').val().toString());
+    var startDatetime = dayjs($('#dateFrom').val().toString(), 'YYYY-MM-DD[T]HH:mm');
+    var endDatetime = dayjs($('#dateTo').val().toString(), 'YYYY-MM-DD[T]HH:mm');
     return new rf.Period(startDatetime, endDatetime);
 }
 function displayRoutes(routeList) {

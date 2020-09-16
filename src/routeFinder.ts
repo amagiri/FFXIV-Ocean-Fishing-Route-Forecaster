@@ -7,22 +7,20 @@ export var refRoute: Route;
 
 /* SETUP */
 // Adds default route options to a reference array
-export function setup() {
+export async function setup() {
     // Import route options JSON
-    var routesURL = 'data/routes.json';
-    var routesRequest = new XMLHttpRequest();
-    routesRequest.overrideMimeType("application/json");
-    routesRequest.open('GET', routesURL);
-    routesRequest.send();
-    routesRequest.onload = function () {
-        var response = routesRequest.response;
-        var parsedRoutes = JSON.parse(response);
-        
+    var parsedRoutes;
+    try {
+        const response = await fetch('data/routes.json');
+        parsedRoutes = await response.json();
+
         importRoutes(routeList, parsedRoutes);
         refRoute = setAnchor(routeList, refRoute);
-
+    } catch (error) {
+        console.error(error);
+        alert('Request failed');
         return;
-    };
+    }
 }
 
 // Import route options
@@ -223,4 +221,3 @@ export class Period {
         this.end = end;
     }
 }
-

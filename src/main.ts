@@ -1,4 +1,4 @@
-import * as rf from "./routeFinder.js";
+import * as rf from "./routeFinder.mjs";
 
 /* SETUP */
 // Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first
@@ -82,8 +82,8 @@ function getRouteInputs() {
 // Reads form datetime inputs
 function getDateInputs() {
     // These will not have seconds/millisecond values
-    const startDatetime = dayjs($('#dateFrom').val().toString());
-    const endDatetime = dayjs($('#dateTo').val().toString());
+    const startDatetime = dayjs($('#dateFrom').val().toString(), 'YYYY-MM-DD[T]HH:mm');
+    const endDatetime = dayjs($('#dateTo').val().toString(), 'YYYY-MM-DD[T]HH:mm');
 
     return new rf.Period(startDatetime, endDatetime);
 }

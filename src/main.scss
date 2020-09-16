@@ -1,5 +1,32 @@
 body {
     text-align: center;
+    padding: 40px;
+}
+
+#results {
+    width: 100%;
+    display: flex;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0.25rem;
+    font-size: small;
+
+    img {
+        width: 28px;
+        border-radius: 0.25rem;
+    }
+}
+
+
+/* INPUT */
+form {
+    margin: auto;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
 }
 
 ul {
@@ -16,12 +43,6 @@ li {
     list-style-type: none;
 }
 
-form {
-    margin: auto;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-}
-
 .dateOption {
     display: inline-block;
     margin: 0 2rem;
@@ -30,11 +51,8 @@ form {
 input[type="submit"] {
     margin: 2rem 0;
 }
+/* OUTPUT */
 
-#results {
-    width: 100%;
-    display: flex;
-}
 
 table {
     padding: 2rem;
@@ -50,9 +68,3 @@ td:first-child {
     text-align: right;
 }
 
-#footer {
-    position: fixed;
-    bottom: 0;
-    padding-bottom: 0.25rem;
-    font-size: small;
-}
