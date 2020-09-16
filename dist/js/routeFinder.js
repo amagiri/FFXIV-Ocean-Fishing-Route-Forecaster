@@ -67,9 +67,10 @@ function importRoutes(routeList, parsedRoutes) {
     routeKeys.forEach(function (route) {
         var name = parsedRoutes[route].routeName;
         var time = parsedRoutes[route].routeTime;
-        var type = parsedRoutes[route].routeType;
+        var loc = parsedRoutes[route].routeLocation;
+        var fish = parsedRoutes[route].fishType;
         var key = route;
-        var reference = new Route(name, time, type, key);
+        var reference = new Route(name, time, loc, key, fish);
         routeList.push(reference);
     });
 }
@@ -160,7 +161,7 @@ function getRoute(refRoute, inputTime) {
             console.log('LOL SHRUG');
             break;
     }
-    var currentRoute = getRouteByNameTime(hourlyRoute, hourlyTime);
+    var currentRoute = getRouteByLocTime(hourlyRoute, hourlyTime);
     currentRoute.datetime = dayjs(inputTime);
     return currentRoute;
 }
@@ -181,19 +182,20 @@ function getRouteByKey(routeKey, routeList) {
         }
     }
 }
-function getRouteByNameTime(routeType, routeTime) {
+function getRouteByLocTime(routeType, routeTime) {
     for (var i = 0; i < routeList.length; i++) {
-        if (routeType === routeList[i].routeType && routeTime === routeList[i].routeTime) {
+        if (routeType === routeList[i].routeLocation && routeTime === routeList[i].routeTime) {
             var route = JSON.parse(JSON.stringify(routeList[i]));
             return route;
         }
     }
 }
 var Route = (function () {
-    function Route(name, time, type, key) {
+    function Route(name, time, loc, key, fish) {
         this.routeName = name;
         this.routeTime = time;
-        this.routeType = type;
+        this.fishType = fish;
+        this.routeLocation = loc;
         this.key = key;
     }
     return Route;

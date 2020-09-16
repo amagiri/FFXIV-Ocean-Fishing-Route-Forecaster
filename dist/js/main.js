@@ -1,4 +1,4 @@
-import * as rf from "./routeFinder.mjs";
+import * as rf from "./routeFinder.js";
 (function () {
     rf.setup();
     var fromDate = dayjs();

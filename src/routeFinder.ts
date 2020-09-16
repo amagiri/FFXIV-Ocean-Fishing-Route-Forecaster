@@ -29,10 +29,11 @@ function importRoutes(routeList: Route[], parsedRoutes: Object[]) {
     routeKeys.forEach((route) => {
         const name: string = parsedRoutes[route].routeName;
         const time: string = parsedRoutes[route].routeTime;
-        const type: string = parsedRoutes[route].routeType;
+        const loc: string = parsedRoutes[route].routeLocation;
+        const fish: string = parsedRoutes[route].fishType;
         const key: string = route;
 
-        var reference = new Route(name, time, type, key);
+        var reference = new Route(name, time, loc, key, fish);
         routeList.push(reference);  // Generates global variable list of current routes
     });
 }
@@ -153,7 +154,7 @@ function getRoute(refRoute: Route, inputTime: Dayjs) {
             break;
     }
 
-    var currentRoute = getRouteByNameTime(hourlyRoute, hourlyTime);
+    var currentRoute = getRouteByLocTime(hourlyRoute, hourlyTime);
     currentRoute.datetime = dayjs(inputTime);
 
     return currentRoute;
@@ -185,9 +186,9 @@ function getRouteByKey(routeKey: string, routeList: Route[]) {
 }
 
 // Returns a route for a given route name and time combination
-function getRouteByNameTime(routeType: string, routeTime: string) {
+function getRouteByLocTime(routeType: string, routeTime: string) {
     for (let i = 0; i < routeList.length; i++) {
-        if (routeType === routeList[i].routeType && routeTime === routeList[i].routeTime) {
+        if (routeType === routeList[i].routeLocation && routeTime === routeList[i].routeTime) {
             const route: Route = JSON.parse(JSON.stringify(routeList[i]));
 
             return route;
@@ -200,14 +201,16 @@ function getRouteByNameTime(routeType: string, routeTime: string) {
 export class Route {
     routeName: string;
     routeTime: string;
-    routeType: string;
+    routeLocation: string;
+    fishType: string;
     key: string;
     datetime: Dayjs;
 
-    constructor(name: string, time: string, type: string, key: string) {
+    constructor(name: string, time: string, loc: string, key: string, fish: string) {
         this.routeName = name;
         this.routeTime = time;
-        this.routeType = type;
+        this.fishType = fish;
+        this.routeLocation = loc;
         this.key = key;
     }
 }

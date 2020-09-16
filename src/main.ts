@@ -1,4 +1,4 @@
-import * as rf from "./routeFinder.mjs";
+import * as rf from "./routeFinder.js";
 
 /* SETUP */
 // Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first

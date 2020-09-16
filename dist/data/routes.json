@@ -2,31 +2,37 @@
     "sunsetMerlthor": {
         "routeName": "Northern by Sunset (Dragon)",
         "routeTime": "sunset",
-        "routeType": "Northern Strait of Merlthor"
+        "routeLocation": "Northern Strait of Merlthor",
+        "fishType": "dragon"
     },
     "nightMerlthor": {
         "routeName": "Northern by Night (Octo)",
         "routeTime": "night",
-        "routeType": "Northern Strait of Merlthor"
+        "routeLocation": "Northern Strait of Merlthor",
+        "fishType": "octo"
     },
     "dayMerlthor": {
         "routeName": "Northern by Day (Blue-3)",
         "routeTime": "day",
-        "routeType": "Northern Strait of Merlthor"
+        "routeLocation": "Northern Strait of Merlthor",
+        "fishType": "blue-3"
     },
     "sunsetRhotano": {
         "routeName": "Rhotano by Sunset (Blue-4)",
         "routeTime": "sunset",
-        "routeType": "Open Rhotano Sea"
+        "routeLocation": "Open Rhotano Sea",
+        "fishType": "blue-4"
     },
     "nightRhotano": {
         "routeName": "Rhotano by Night (Jelly)",
         "routeTime": "night",
-        "routeType": "Open Rhotano Sea"
+        "routeLocation": "Open Rhotano Sea",
+        "fishType": "jelly"
     },
     "dayRhotano": {
         "routeName": "Rhotano by Day (Shark)",
         "routeTime": "day",
-        "routeType": "Open Rhotano Sea"
+        "routeLocation": "Open Rhotano Sea",
+        "fishType": "shark"
     }
 }
