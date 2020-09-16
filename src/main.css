@@ -1,0 +1,70 @@
+body {
+  text-align: center;
+  padding: 40px;
+}
+
+#results {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 0.25rem;
+  font-size: small;
+}
+
+#footer img {
+  width: 28px;
+  border-radius: 0.25rem;
+}
+
+/* INPUT */
+form {
+  margin: auto;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+ul {
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+  text-align: left;
+  margin: auto;
+  margin-bottom: 2rem;
+  max-width: 760px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.dateOption {
+  display: inline-block;
+  margin: 0 2rem;
+}
+
+input[type="submit"] {
+  margin: 2rem 0;
+}
+
+/* OUTPUT */
+table {
+  padding: 2rem;
+  margin: auto;
+}
+
+td, th {
+  min-width: 30%;
+  padding: 0.2rem 1rem;
+}
+
+td:first-child {
+  text-align: right;
+}
+/*# sourceMappingURL=main.css.map */
