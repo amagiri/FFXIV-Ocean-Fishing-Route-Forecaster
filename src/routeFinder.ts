@@ -1,5 +1,3 @@
-import { time } from "console";
-
 var routeMap = new Map<string, string[]>();  // Stores a mapping of criteria to keywords
 export var refRoute: Anchor; // Stores a baseline Route that everything else will be calculated off of
 
@@ -16,7 +14,6 @@ export async function setup() {
         refRoute = new Anchor("sunsetMerlthor", "2020-09-03T16:00:00.000Z"); // Sets anchor time and route with which everything will be calculated
     } catch (error) {
         console.error(error);
-        alert('Request failed');
         return;
     }
 }
@@ -30,13 +27,37 @@ function mapRouteIdentifiers(parsedRoutes: KeyList) {
 
 
 /* MAIN FUNCTION */
-export default function main(refRoute: Anchor, inputKeys: string[], inputTimespan: Period) {
+export default function main(refRoute: Anchor, inputKeys: string[], inputTimespan: Period, inputRange: Range) {
+    const validKeys = convertKeys(inputKeys);
     adjustTimespan(refRoute, inputTimespan);    // Adjust timespan relative to the reference so that it starts and ends on a route time
+    var validHours: number[] = filterHours(refRoute, inputRange);
 
-    var validRoutes = findAllRoutes(inputTimespan);
-    validRoutes = filterRoutes(validRoutes, inputKeys);
+    var totalRoutes = findAllRoutes(inputTimespan);
+    var validRoutes = filterRoutes(totalRoutes, validKeys, validHours);
 
     return validRoutes;
+}
+
+function convertKeys(inputKeys: string[]) {
+    var validSet = new Set<string>();
+    inputKeys.forEach((key) => {
+        if (routeMap.has(key)) {
+            var values: string[] = routeMap.get(key);
+            values.forEach((value) => {
+                if (!validSet.has(value)) {
+                    validSet.add(value);
+                }
+            })
+        }
+        else {
+            if (!validSet.has(key)) {
+                validSet.add(key);
+            }
+        }
+    })
+
+    const validKeys = Array.from(validSet);
+    return validKeys;
 }
 
 function adjustTimespan(refRoute: Anchor, timespan: Period) {
@@ -64,12 +85,28 @@ function adjustTimespan(refRoute: Anchor, timespan: Period) {
     }
 }
 
+function filterHours(refRoute: Anchor, inputRange: Range) {
+    var validHours: number[] = new Array();
+    const refHour = refRoute.datetime.hour();
+    var currentHour = inputRange.start;
+
+    while (currentHour <= inputRange.end) {
+        if (Math.abs(currentHour - refHour) % 2 === 0) {    // If the time is apart by a multiple of two, then it is a valid route hour
+            validHours.push(currentHour);     
+        }
+        currentHour++;
+    }
+
+    return validHours;
+}
+
+
 // Finds all routes
-function findAllRoutes(timespan: Period): Solution[] {
-    var outputRoutes: Solution[] = new Array();
+function findAllRoutes(timespan: Period): RawSolution[] {
+    var outputRoutes: RawSolution[] = new Array();
     var currentTime: Dayjs = timespan.start;
 
-    while (timespan.end.diff(currentTime) > 0) {
+    while (timespan.end.diff(currentTime) >= 0) {
         outputRoutes.push(getRoute(refRoute, currentTime));
 
         currentTime = currentTime.add(2, 'hour');   // Move forward two hours
@@ -78,7 +115,7 @@ function findAllRoutes(timespan: Period): Solution[] {
     return outputRoutes;
 }
 
-function getRoute(refRoute: Anchor, inputTime: Dayjs) {
+function getRoute(refRoute: Anchor, inputTime: Dayjs): RawSolution {
     const timeElapsed: number = inputTime.diff(refRoute.datetime);
     const hourConversion = 1000 * 60 * 60;
     const totalHours = timeElapsed/hourConversion;  // This should always be a whole number due to our earlier rounding
@@ -138,18 +175,19 @@ function getRoute(refRoute: Anchor, inputTime: Dayjs) {
             break;
     }
 
+    const currentHour = inputTime.hour();
     const currentRoute = hourlyTime.concat(hourlyRoute);    // Generate the keyword for the given combination
     const jsDate: Date = inputTime.toDate();    // Convert dayjs object back to JavaScript Date object
     const displayDate: string = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'});    // Convert to string
 
-    return new Solution(currentRoute, displayDate);
+    return new RawSolution(currentRoute, displayDate, currentHour);
 }
 
-function filterRoutes(routeList: Solution[], inputKeys: string[]) {
+function filterRoutes(routeList: RawSolution[], inputKeys: string[], validHours: number[]) {
     var filteredRoutes: Solution[] = new Array();
 
     routeList.forEach((route) => {
-        if (inputKeys.includes(route.key)) {
+        if (inputKeys.includes(route.key) && validHours.includes(route.hour)) {
             filteredRoutes.push(route);
         }
     })
@@ -196,6 +234,25 @@ export class Solution {
     constructor(key: string, displayTime: string) {
         this.key = key;
         this.displayTime = displayTime;
+    }
+}
+
+class RawSolution extends Solution {
+    hour: number;
+
+    constructor(key: string, displayTime: string, hour: number) {
+        super(key, displayTime);
+        this.hour = hour;
+    }
+}
+
+export class Range {
+    start: number;
+    end: number;
+
+    constructor(start: number, end: number) {
+        this.start = start;
+        this.end = end;
     }
 }
 

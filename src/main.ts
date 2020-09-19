@@ -62,8 +62,9 @@ function formValidation(refRoute: rf.Anchor) {
 function getSpecifiedRoutes(refRoute: rf.Anchor) {
     const inputKeys: string[] = getRouteInputs();
     var inputTimespan: rf.Period = getDateInputs();
+    var inputRange = new rf.Range(0, 23);   // This is currently not supported on the web, so these are default values
     
-    const validRoutes: rf.Solution[] = rf.default(refRoute, inputKeys, inputTimespan);
+    const validRoutes: rf.Solution[] = rf.default(refRoute, inputKeys, inputTimespan, inputRange);
     displayRoutes(validRoutes);
 }
 
@@ -145,4 +146,16 @@ $('#routeForm').on('submit', function(event) {
 
     // Run main function
     getSpecifiedRoutes(refRoute);
+})
+
+$('button#clearAll').on('click', function(event) {
+    $('form input:checkbox').prop('checked', false);
+})
+
+$('button#clearRoute').on('click', function(event) {
+    $('form #routeInputs input:checkbox').prop('checked', false);
+})
+
+$('button#clearFish').on('click', function(event) {
+    $('form #fishInputs input:checkbox').prop('checked', false);
 })

@@ -1,3 +1,16 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -55,7 +68,6 @@ export function setup() {
                 case 3:
                     error_1 = _a.sent();
                     console.error(error_1);
-                    alert('Request failed');
                     return [2];
                 case 4: return [2];
             }
@@ -67,11 +79,33 @@ function mapRouteIdentifiers(parsedRoutes) {
         routeMap.set(value.name, value.routes);
     });
 }
-export default function main(refRoute, inputKeys, inputTimespan) {
+export default function main(refRoute, inputKeys, inputTimespan, inputRange) {
+    var validKeys = convertKeys(inputKeys);
     adjustTimespan(refRoute, inputTimespan);
-    var validRoutes = findAllRoutes(inputTimespan);
-    validRoutes = filterRoutes(validRoutes, inputKeys);
+    var validHours = filterHours(refRoute, inputRange);
+    var totalRoutes = findAllRoutes(inputTimespan);
+    var validRoutes = filterRoutes(totalRoutes, validKeys, validHours);
     return validRoutes;
+}
+function convertKeys(inputKeys) {
+    var validSet = new Set();
+    inputKeys.forEach(function (key) {
+        if (routeMap.has(key)) {
+            var values = routeMap.get(key);
+            values.forEach(function (value) {
+                if (!validSet.has(value)) {
+                    validSet.add(value);
+                }
+            });
+        }
+        else {
+            if (!validSet.has(key)) {
+                validSet.add(key);
+            }
+        }
+    });
+    var validKeys = Array.from(validSet);
+    return validKeys;
 }
 function adjustTimespan(refRoute, timespan) {
     timespan.start = timespan.start.millisecond(0);
@@ -89,10 +123,22 @@ function adjustTimespan(refRoute, timespan) {
         timespan.end = timespan.end.subtract(1, 'hour');
     }
 }
+function filterHours(refRoute, inputRange) {
+    var validHours = new Array();
+    var refHour = refRoute.datetime.hour();
+    var currentHour = inputRange.start;
+    while (currentHour <= inputRange.end) {
+        if (Math.abs(currentHour - refHour) % 2 === 0) {
+            validHours.push(currentHour);
+        }
+        currentHour++;
+    }
+    return validHours;
+}
 function findAllRoutes(timespan) {
     var outputRoutes = new Array();
     var currentTime = timespan.start;
-    while (timespan.end.diff(currentTime) > 0) {
+    while (timespan.end.diff(currentTime) >= 0) {
         outputRoutes.push(getRoute(refRoute, currentTime));
         currentTime = currentTime.add(2, 'hour');
     }
@@ -152,15 +198,16 @@ function getRoute(refRoute, inputTime) {
             console.log('LOL SHRUG');
             break;
     }
+    var currentHour = inputTime.hour();
     var currentRoute = hourlyTime.concat(hourlyRoute);
     var jsDate = inputTime.toDate();
     var displayDate = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });
-    return new Solution(currentRoute, displayDate);
+    return new RawSolution(currentRoute, displayDate, currentHour);
 }
-function filterRoutes(routeList, inputKeys) {
+function filterRoutes(routeList, inputKeys, validHours) {
     var filteredRoutes = new Array();
     routeList.forEach(function (route) {
-        if (inputKeys.includes(route.key)) {
+        if (inputKeys.includes(route.key) && validHours.includes(route.hour)) {
             filteredRoutes.push(route);
         }
     });
@@ -196,4 +243,21 @@ var Solution = (function () {
     return Solution;
 }());
 export { Solution };
+var RawSolution = (function (_super) {
+    __extends(RawSolution, _super);
+    function RawSolution(key, displayTime, hour) {
+        var _this = _super.call(this, key, displayTime) || this;
+        _this.hour = hour;
+        return _this;
+    }
+    return RawSolution;
+}(Solution));
+var Range = (function () {
+    function Range(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+    return Range;
+}());
+export { Range };
 //# sourceMappingURL=routeFinder.js.map

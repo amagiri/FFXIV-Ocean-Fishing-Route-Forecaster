@@ -59,7 +59,7 @@ function formValidation(refRoute) {
         return false;
     }
     if (inputTimespan.start.diff(refRoute.datetime) < 0 || inputTimespan.end.diff(refRoute.datetime) < 0) {
-        alert('This date is not supported. Updating dates.');
+        alert('One or more of these dates is not supported. Updating dates.');
         if (inputTimespan.start.diff(refRoute.datetime) < 0) {
             var fromInput = document.querySelector('#dateFrom')._flatpickr;
             fromInput.setDate(dayjs().toDate());
@@ -75,7 +75,8 @@ function formValidation(refRoute) {
 function getSpecifiedRoutes(refRoute) {
     var inputKeys = getRouteInputs();
     var inputTimespan = getDateInputs();
-    var validRoutes = rf["default"](refRoute, inputKeys, inputTimespan);
+    var inputRange = new rf.Range(0, 23);
+    var validRoutes = rf["default"](refRoute, inputKeys, inputTimespan, inputRange);
     displayRoutes(validRoutes);
 }
 function getRouteInputs() {
@@ -142,5 +143,14 @@ $('#routeForm').on('submit', function (event) {
         return;
     }
     getSpecifiedRoutes(refRoute);
+});
+$('button#clearAll').on('click', function (event) {
+    $('form input:checkbox').prop('checked', false);
+});
+$('button#clearRoute').on('click', function (event) {
+    $('form #routeInputs input:checkbox').prop('checked', false);
+});
+$('button#clearFish').on('click', function (event) {
+    $('form #fishInputs input:checkbox').prop('checked', false);
 });
 //# sourceMappingURL=main.js.map

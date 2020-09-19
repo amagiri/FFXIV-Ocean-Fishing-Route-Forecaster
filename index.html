@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>FFXIV Ocean Fishing Route Forecaster</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Security-Policy" 
 		content="default-src 'self' https://cdn.jsdelivr.net; 
 				 script-src 'self' https://code.jquery.com/ https://unpkg.com/ https://cdn.jsdelivr.net 'unsafe-inline'" />
@@ -14,35 +15,63 @@
 		Credit to <a href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis 
 		<form id="routeForm">
 			<h3>Select Conditions</h3>
-			<ul id="routeInputs">
-				<li>
-					<input type="checkbox" id="sunsetMerlthor" checked>
-					<label for="sunsetMerlthor">Northern by Sunset (Dragon)</label>
-				</li>
-				<li>
-					<input type="checkbox" id="sunsetRhotano" checked>
-					<label for="sunsetRhotano">Rhotano by Sunset (Blue-4)</label>
-				</li>
-				<li>
-					<input type="checkbox" id="nightMerlthor" checked>
-					<label for="nightMerlthor">Northern by Night (Octo)</label>
-				</li>
-				<li>
-					<input type="checkbox" id="nightRhotano" checked>
-					<label for="nightRhotano">Rhotano by Night (Jelly)</label>
-				</li>
-				<li>				
-					<input type="checkbox" id="dayMerlthor" checked>
-					<label for="dayMerlthor">Northern by Day (Blue-3)</label>
-				</li>
-				<li>
-					<input type="checkbox" id="dayRhotano" checked>
-					<label for="dayRhotano">Rhotano by Day (Shark)</label>
-				</li>
-			</ul>
+			<div class="route">
+				<ul id="routeInputs">
+					<li>
+						<input type="checkbox" id="sunsetMerlthor" checked>
+						<label for="sunsetMerlthor">Northern by Sunset (Dragon)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="sunsetRhotano" checked>
+						<label for="sunsetRhotano">Rhotano by Sunset (Blue-4)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightMerlthor" checked>
+						<label for="nightMerlthor">Northern by Night (Octo)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightRhotano" checked>
+						<label for="nightRhotano">Rhotano by Night (Jelly)</label>
+					</li>
+					<li>				
+						<input type="checkbox" id="dayMerlthor" checked>
+						<label for="dayMerlthor">Northern by Day (Blue-3)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayRhotano" checked>
+						<label for="dayRhotano">Rhotano by Day (Shark)</label>
+					</li>
+				</ul>
+			</div>
 
-			<h3>Select Dates</h3>
-			<div>
+			<h3>Select Blue Fish</h3>
+			<div class="route">
+				<ul id="fishInputs">
+					<li>
+						<input type="checkbox" id="sothis" checked>
+						<label for="sothis">Sothis</label>
+					</li>
+					<li>
+						<input type="checkbox" id="coralmanta" checked>
+						<label for="coralmanta">Coral Manta</label>
+					</li>
+					<li>
+						<input type="checkbox" id="elasmosaurus" checked>
+						<label for="elasmosaurus">Elasmosaurus</label>
+					</li>
+					<li>
+						<input type="checkbox" id="stonescale" checked>
+						<label for="stonescale">Stonescale</label>
+					</li>
+				</ul>
+	
+				<button type="button" id="clearAll">Deselect All</button>
+				<button type="button" id="clearRoute">Deselect Conditions</button>
+				<button type="button" id="clearFish">Deselect Fish</button>
+			</div>
+
+			<h3>Select Times and Dates</h3>
+			<div class="range">
 				<div class="dateOption">				
 					<label for="dateFrom">From: </label>
 					<input id="dateFrom" class="datetime" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
@@ -52,9 +81,9 @@
 					<input id="dateTo" class="datetime" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
 				</div>
 			</div>
-		</form>
 
-		<button type="submit" id="formSubmit" form="routeForm">Find Routes</button>
+			<button type="submit" id="formSubmit" form="routeForm">Find Routes</button>
+		</form>
 
 		<div id="results">
 			<table>
