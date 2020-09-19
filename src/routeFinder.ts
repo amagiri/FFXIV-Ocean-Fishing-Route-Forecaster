@@ -1,3 +1,5 @@
+import { time } from "console";
+
 var routeMap = new Map<string, string[]>();  // Stores a mapping of criteria to keywords
 export var refRoute: Anchor; // Stores a baseline Route that everything else will be calculated off of
 
@@ -39,12 +41,16 @@ export default function main(refRoute: Anchor, inputKeys: string[], inputTimespa
 
 function adjustTimespan(refRoute: Anchor, timespan: Period) {
     // Round start period up to the nearset hour
+    timespan.start = timespan.start.millisecond(0);
+    timespan.start = timespan.start.second(0);
     timespan.start = timespan.start.minute(0);   
     timespan.start = timespan.start.add(1, 'hour');  
     // If num in setHours(num) exceeds 23, the day will increment, so I will not check for overflow
     // Likewise if it is less than 0, the day will decrement
 
     timespan.end = timespan.end.minute(0); // Round end period down
+    timespan.end = timespan.end.second(0);
+    timespan.end = timespan.end.minute(0);   
 
     // Adjust start and end times as necessary so that they are in increments of 2 from the reference
     const refHour = refRoute.datetime.hour();

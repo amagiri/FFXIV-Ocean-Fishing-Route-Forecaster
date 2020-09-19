@@ -74,8 +74,12 @@ export default function main(refRoute, inputKeys, inputTimespan) {
     return validRoutes;
 }
 function adjustTimespan(refRoute, timespan) {
+    timespan.start = timespan.start.millisecond(0);
+    timespan.start = timespan.start.second(0);
     timespan.start = timespan.start.minute(0);
     timespan.start = timespan.start.add(1, 'hour');
+    timespan.end = timespan.end.minute(0);
+    timespan.end = timespan.end.second(0);
     timespan.end = timespan.end.minute(0);
     var refHour = refRoute.datetime.hour();
     if (((timespan.start.hour() - refHour) % 2) != 0) {

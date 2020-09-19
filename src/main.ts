@@ -3,18 +3,18 @@ import * as rf from "./routeFinder.js";
 /* SETUP */
 // Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first
 (function() {
-    // Sets up reference routes array and reference route/time
+    // Set up reference routes array and reference route/time
     rf.setup();
 
-    // Generate default from and to dates
+    // Generate default from and to datetimes
     const fromDate = dayjs();
-    var displayFromDate: string = fromDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateFrom').val(displayFromDate);
+    const jsFromDate: Date = fromDate.toDate();
+    $('#dateFrom').flatpickr({enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K"});
 
     const addedDays = 7; 
-    var toDate = fromDate.add(addedDays, 'day');
-    var displayToDate: string = toDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateTo').val(displayToDate);
+    const toDate = fromDate.add(addedDays, 'day');
+    const jsToDate: Date = toDate.toDate();
+    $('#dateTo').flatpickr({enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K"});
 })();
 
 // Validates form inputs on submit
@@ -69,9 +69,11 @@ function getRouteInputs() {
 
 // Reads form datetime inputs
 function getDateInputs() {
-    // These will not have seconds/millisecond values
-    const startDatetime = dayjs($('#dateFrom').val().toString(), 'YYYY-MM-DD[T]HH:mm');
-    const endDatetime = dayjs($('#dateTo').val().toString(), 'YYYY-MM-DD[T]HH:mm');
+    const fromInput = document.querySelector('#dateFrom')._flatpickr;
+    const startDatetime = dayjs(fromInput.selectedDates);
+
+    const toInput = document.querySelector('#dateTo')._flatpickr;
+    const endDatetime = dayjs(toInput.selectedDates);
 
     return new rf.Period(startDatetime, endDatetime);
 }
@@ -133,5 +135,3 @@ $('#routeForm').on('submit', function(event) {
     // Run main function
     getSpecifiedRoutes(refRoute);
 })
-
-

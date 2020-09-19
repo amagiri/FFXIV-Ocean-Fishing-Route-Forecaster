@@ -38,12 +38,12 @@ import * as rf from "./routeFinder.js";
 (function () {
     rf.setup();
     var fromDate = dayjs();
-    var displayFromDate = fromDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateFrom').val(displayFromDate);
+    var jsFromDate = fromDate.toDate();
+    $('#dateFrom').flatpickr({ enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K" });
     var addedDays = 7;
     var toDate = fromDate.add(addedDays, 'day');
-    var displayToDate = toDate.format('YYYY-MM-DD[T]HH:mm');
-    $('#dateTo').val(displayToDate);
+    var jsToDate = toDate.toDate();
+    $('#dateTo').flatpickr({ enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K" });
 })();
 function formValidation(refRoute) {
     if ($('input[type="checkbox"]').filter(':checked').length === 0) {
@@ -80,8 +80,10 @@ function getRouteInputs() {
     return selectedRoutes;
 }
 function getDateInputs() {
-    var startDatetime = dayjs($('#dateFrom').val().toString(), 'YYYY-MM-DD[T]HH:mm');
-    var endDatetime = dayjs($('#dateTo').val().toString(), 'YYYY-MM-DD[T]HH:mm');
+    var fromInput = document.querySelector('#dateFrom')._flatpickr;
+    var startDatetime = dayjs(fromInput.selectedDates);
+    var toInput = document.querySelector('#dateTo')._flatpickr;
+    var endDatetime = dayjs(toInput.selectedDates);
     return new rf.Period(startDatetime, endDatetime);
 }
 function displayRoutes(results) {
