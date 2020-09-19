@@ -52,15 +52,22 @@ function formValidation(refRoute) {
     }
     var inputTimespan = getDateInputs();
     if (inputTimespan.end.diff(inputTimespan.start) < 0) {
-        alert('Start time is larger than end time. Updating start value.');
-        var displayFromDate = inputTimespan.end.format('YYYY-MM-DD[T]HH:mm');
-        $('#dateFrom').val(displayFromDate);
+        alert('Start time is larger than end time. Updating start date.');
+        var fromInput = document.querySelector('#dateFrom')._flatpickr;
+        var toInput = document.querySelector('#dateTo')._flatpickr;
+        fromInput.setDate(toInput.selectedDates);
         return false;
     }
-    if (inputTimespan.start.diff(refRoute.datetime) < 0) {
-        alert('This date is not supported. Updating start value.');
-        var displayFromDate = refRoute.datetime.format('YYYY-MM-DD[T]HH:mm');
-        $('#dateFrom').val(displayFromDate);
+    if (inputTimespan.start.diff(refRoute.datetime) < 0 || inputTimespan.end.diff(refRoute.datetime) < 0) {
+        alert('This date is not supported. Updating dates.');
+        if (inputTimespan.start.diff(refRoute.datetime) < 0) {
+            var fromInput = document.querySelector('#dateFrom')._flatpickr;
+            fromInput.setDate(dayjs().toDate());
+        }
+        if (inputTimespan.end.diff(refRoute.datetime) < 0) {
+            var toInput = document.querySelector('#dateTo')._flatpickr;
+            toInput.setDate(dayjs().toDate());
+        }
         return false;
     }
     return true;

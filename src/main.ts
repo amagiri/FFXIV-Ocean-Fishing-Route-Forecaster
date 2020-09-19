@@ -29,18 +29,29 @@ function formValidation(refRoute: rf.Anchor) {
     // Check if start time is larger than end time
     const inputTimespan: rf.Period = getDateInputs();
     if (inputTimespan.end.diff(inputTimespan.start) < 0) {
-        alert('Start time is larger than end time. Updating start value.')
+        alert('Start time is larger than end time. Updating start date.')
 
-        const displayFromDate: string = inputTimespan.end.format('YYYY-MM-DD[T]HH:mm');
-        $('#dateFrom').val(displayFromDate);  // Sets start time to end time
+        const fromInput = document.querySelector('#dateFrom')._flatpickr;
+        const toInput = document.querySelector('#dateTo')._flatpickr;
+
+        fromInput.setDate(toInput.selectedDates);
         return false;
     }
 
-    if (inputTimespan.start.diff(refRoute.datetime) < 0) {
-        alert('This date is not supported. Updating start value.');
+    if (inputTimespan.start.diff(refRoute.datetime) < 0 || inputTimespan.end.diff(refRoute.datetime) < 0) {
+        alert('One or more of these dates is not supported. Updating dates.');
 
-        const displayFromDate: string = refRoute.datetime.format('YYYY-MM-DD[T]HH:mm');
-        $('#dateFrom').val(displayFromDate);    // Sets start time to first supported time
+        if (inputTimespan.start.diff(refRoute.datetime) < 0) {
+            const fromInput = document.querySelector('#dateFrom')._flatpickr;
+            fromInput.setDate(dayjs().toDate());  // Sets start time to current time
+        }
+
+        if (inputTimespan.end.diff(refRoute.datetime) < 0) {
+            const toInput = document.querySelector('#dateTo')._flatpickr;
+            toInput.setDate(dayjs().toDate());  // Sets start time to current time
+        }
+        
+
         return false;
     }
 
