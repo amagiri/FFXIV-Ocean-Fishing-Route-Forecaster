@@ -1,21 +1,17 @@
-// Stores the list of routes
-export var routeList: Route[] = new Array();
-
-// Stores a baseline Route that everything else will be calculated off of
-export var refRoute: Route; 
+var routeMap = new Map<string, string[]>();  // Stores a mapping of criteria to keywords
+export var refRoute: Anchor; // Stores a baseline Route that everything else will be calculated off of
 
 
 /* SETUP */
 // Adds default route options to a reference array
 export async function setup() {
     // Import route options JSON
-    var parsedRoutes;
     try {
-        const response = await fetch('data/routes.json');
-        parsedRoutes = await response.json();
+        const routeResponse = await fetch('data/routeKeys.json');
+        var parsedKeys = await routeResponse.json();
+        mapRouteIdentifiers(parsedKeys);
 
-        importRoutes(routeList, parsedRoutes);
-        refRoute = setAnchor(routeList, refRoute);
+        refRoute = new Anchor("sunsetMerlthor", "2020-09-03T16:00:00.000Z"); // Sets anchor time and route with which everything will be calculated
     } catch (error) {
         console.error(error);
         alert('Request failed');
@@ -23,32 +19,16 @@ export async function setup() {
     }
 }
 
-// Import route options
-function importRoutes(routeList: Route[], parsedRoutes: Object[]) {
-    var routeKeys: string[] = Object.keys(parsedRoutes);
-    routeKeys.forEach((route) => {
-        const name: string = parsedRoutes[route].routeName;
-        const time: string = parsedRoutes[route].routeTime;
-        const loc: string = parsedRoutes[route].routeLocation;
-        const fish: string = parsedRoutes[route].fishType;
-        const key: string = route;
-
-        var reference = new Route(name, time, loc, key, fish);
-        routeList.push(reference);  // Generates global variable list of current routes
-    });
-}
-
-// Sets anchor time and route with which everything will be calculated
-function setAnchor(routeList: Route[], refRoute: Route) {
-    refRoute = getRouteByKey('sunsetMerlthor', routeList);   // Anchor route is Northern Strait of Merlthor at sunset
-    refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z"); // Anchor time is currently September 3, 2020 at 9am PDT
-
-    return refRoute;
+// Maps route criteria to keywords
+function mapRouteIdentifiers(parsedRoutes: KeyList) {
+    parsedRoutes.keywords.forEach((value) => {
+        routeMap.set(value.name, value.routes);
+    })
 }
 
 
 /* MAIN FUNCTION */
-export default function main(refRoute: Route, inputKeys: string[], inputTimespan: Period) {
+export default function main(refRoute: Anchor, inputKeys: string[], inputTimespan: Period) {
     adjustTimespan(refRoute, inputTimespan);    // Adjust timespan relative to the reference so that it starts and ends on a route time
 
     var validRoutes = findAllRoutes(inputTimespan);
@@ -57,7 +37,7 @@ export default function main(refRoute: Route, inputKeys: string[], inputTimespan
     return validRoutes;
 }
 
-function adjustTimespan(refRoute: Route, timespan: Period) {
+function adjustTimespan(refRoute: Anchor, timespan: Period) {
     // Round start period up to the nearset hour
     timespan.start = timespan.start.minute(0);   
     timespan.start = timespan.start.add(1, 'hour');  
@@ -76,13 +56,11 @@ function adjustTimespan(refRoute: Route, timespan: Period) {
     if (((timespan.end.hour() - refHour) % 2) != 0) {
         timespan.end = timespan.end.subtract(1, 'hour'); // Decrement one hour if the difference is odd
     }
-
-    return;
 }
 
 // Finds all routes
-function findAllRoutes(timespan: Period) {
-    var outputRoutes: Route[] = new Array();
+function findAllRoutes(timespan: Period): Solution[] {
+    var outputRoutes: Solution[] = new Array();
     var currentTime: Dayjs = timespan.start;
 
     while (timespan.end.diff(currentTime) > 0) {
@@ -94,7 +72,7 @@ function findAllRoutes(timespan: Period) {
     return outputRoutes;
 }
 
-function getRoute(refRoute: Route, inputTime: Dayjs) {
+function getRoute(refRoute: Anchor, inputTime: Dayjs) {
     const timeElapsed: number = inputTime.diff(refRoute.datetime);
     const hourConversion = 1000 * 60 * 60;
     const totalHours = timeElapsed/hourConversion;  // This should always be a whole number due to our earlier rounding
@@ -102,8 +80,8 @@ function getRoute(refRoute: Route, inputTime: Dayjs) {
     const daysElapsed = Math.floor(totalHours/24);
     const hoursPassed = totalHours % 24;
 
-    const dailySchedule = ['sunset', 'sunset', 'night', 'night', 'day', 'day'];
-    const sailingRoutes = ['Northern Strait of Merlthor', 'Open Rhotano Sea'];
+    const dailySchedule = ['sunset', 'sunset', 'night', 'night', 'day', 'day']; // IMPORTANT: This is set up relative to the anchor point, so this will need to be updated if the anchor point is changed
+    const sailingRoutes = ['Merlthor', 'Rhotano'];
     const sailingTimes = ['sunset', 'night', 'day'];
 
     const dailyStartTime = dailySchedule[daysElapsed % 6];
@@ -154,14 +132,15 @@ function getRoute(refRoute: Route, inputTime: Dayjs) {
             break;
     }
 
-    var currentRoute = getRouteByLocTime(hourlyRoute, hourlyTime);
-    currentRoute.datetime = dayjs(inputTime);
+    const currentRoute = hourlyTime.concat(hourlyRoute);    // Generate the keyword for the given combination
+    const jsDate: Date = inputTime.toDate();    // Convert dayjs object back to JavaScript Date object
+    const displayDate: string = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'});    // Convert to string
 
-    return currentRoute;
+    return new Solution(currentRoute, displayDate);
 }
 
-function filterRoutes(routeList: Route[], inputKeys: string[]) {
-    var filteredRoutes: Route[] = new Array();
+function filterRoutes(routeList: Solution[], inputKeys: string[]) {
+    var filteredRoutes: Solution[] = new Array();
 
     routeList.forEach((route) => {
         if (inputKeys.includes(route.key)) {
@@ -174,44 +153,23 @@ function filterRoutes(routeList: Route[], inputKeys: string[]) {
 
 
 /* UTILITY FUNCTIONS */
-// Returns a route for a given key/id
-function getRouteByKey(routeKey: string, routeList: Route[]) {
-    for (let i = 0; i < routeList.length; i++) {
-        if (routeKey === routeList[i].key) {
-            const route: Route = JSON.parse(JSON.stringify(routeList[i]));
+function getRoutesByCriteria(criteria: string[]): string | string[] {
+    var route: string;
+    criteria.forEach((input) => {
 
-            return route;
-        }
-    }
+    })
+
+    return route;
 }
-
-// Returns a route for a given route name and time combination
-function getRouteByLocTime(routeType: string, routeTime: string) {
-    for (let i = 0; i < routeList.length; i++) {
-        if (routeType === routeList[i].routeLocation && routeTime === routeList[i].routeTime) {
-            const route: Route = JSON.parse(JSON.stringify(routeList[i]));
-
-            return route;
-        }
-    }
-}
-
 
 /* CLASS DECLARATIONS */
-export class Route {
-    routeName: string;
-    routeTime: string;
-    routeLocation: string;
-    fishType: string;
+export class Anchor {
     key: string;
     datetime: Dayjs;
 
-    constructor(name: string, time: string, loc: string, key: string, fish: string) {
-        this.routeName = name;
-        this.routeTime = time;
-        this.fishType = fish;
-        this.routeLocation = loc;
+    constructor(key: string, datetime: string) {
         this.key = key;
+        this.datetime = dayjs(datetime);
     }
 }
 
@@ -223,4 +181,25 @@ export class Period {
         this.start = start;
         this.end = end;
     }
+}
+
+export class Solution {
+    key: string;
+    displayTime: string;
+
+    constructor(key: string, displayTime: string) {
+        this.key = key;
+        this.displayTime = displayTime;
+    }
+}
+
+
+/* JSON IMPORT INTERFACES */
+interface KeyList {
+    keywords: RouteKeyword[];
+}
+
+interface RouteKeyword {
+    name: string;
+    routes: string[];
 }

@@ -34,23 +34,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-export var routeList = new Array();
+var routeMap = new Map();
 export var refRoute;
 export function setup() {
     return __awaiter(this, void 0, void 0, function () {
-        var parsedRoutes, response, error_1;
+        var routeResponse, parsedKeys, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
-                    return [4, fetch('data/routes.json')];
+                    return [4, fetch('data/routeKeys.json')];
                 case 1:
-                    response = _a.sent();
-                    return [4, response.json()];
+                    routeResponse = _a.sent();
+                    return [4, routeResponse.json()];
                 case 2:
-                    parsedRoutes = _a.sent();
-                    importRoutes(routeList, parsedRoutes);
-                    refRoute = setAnchor(routeList, refRoute);
+                    parsedKeys = _a.sent();
+                    mapRouteIdentifiers(parsedKeys);
+                    refRoute = new Anchor("sunsetMerlthor", "2020-09-03T16:00:00.000Z");
                     return [3, 4];
                 case 3:
                     error_1 = _a.sent();
@@ -62,22 +62,10 @@ export function setup() {
         });
     });
 }
-function importRoutes(routeList, parsedRoutes) {
-    var routeKeys = Object.keys(parsedRoutes);
-    routeKeys.forEach(function (route) {
-        var name = parsedRoutes[route].routeName;
-        var time = parsedRoutes[route].routeTime;
-        var loc = parsedRoutes[route].routeLocation;
-        var fish = parsedRoutes[route].fishType;
-        var key = route;
-        var reference = new Route(name, time, loc, key, fish);
-        routeList.push(reference);
+function mapRouteIdentifiers(parsedRoutes) {
+    parsedRoutes.keywords.forEach(function (value) {
+        routeMap.set(value.name, value.routes);
     });
-}
-function setAnchor(routeList, refRoute) {
-    refRoute = getRouteByKey('sunsetMerlthor', routeList);
-    refRoute.datetime = dayjs("2020-09-03T16:00:00.000Z");
-    return refRoute;
 }
 export default function main(refRoute, inputKeys, inputTimespan) {
     adjustTimespan(refRoute, inputTimespan);
@@ -96,7 +84,6 @@ function adjustTimespan(refRoute, timespan) {
     if (((timespan.end.hour() - refHour) % 2) != 0) {
         timespan.end = timespan.end.subtract(1, 'hour');
     }
-    return;
 }
 function findAllRoutes(timespan) {
     var outputRoutes = new Array();
@@ -114,7 +101,7 @@ function getRoute(refRoute, inputTime) {
     var daysElapsed = Math.floor(totalHours / 24);
     var hoursPassed = totalHours % 24;
     var dailySchedule = ['sunset', 'sunset', 'night', 'night', 'day', 'day'];
-    var sailingRoutes = ['Northern Strait of Merlthor', 'Open Rhotano Sea'];
+    var sailingRoutes = ['Merlthor', 'Rhotano'];
     var sailingTimes = ['sunset', 'night', 'day'];
     var dailyStartTime = dailySchedule[daysElapsed % 6];
     var dailyStartRoute = sailingRoutes[daysElapsed % 2];
@@ -161,9 +148,10 @@ function getRoute(refRoute, inputTime) {
             console.log('LOL SHRUG');
             break;
     }
-    var currentRoute = getRouteByLocTime(hourlyRoute, hourlyTime);
-    currentRoute.datetime = dayjs(inputTime);
-    return currentRoute;
+    var currentRoute = hourlyTime.concat(hourlyRoute);
+    var jsDate = inputTime.toDate();
+    var displayDate = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });
+    return new Solution(currentRoute, displayDate);
 }
 function filterRoutes(routeList, inputKeys) {
     var filteredRoutes = new Array();
@@ -174,33 +162,20 @@ function filterRoutes(routeList, inputKeys) {
     });
     return filteredRoutes;
 }
-function getRouteByKey(routeKey, routeList) {
-    for (var i = 0; i < routeList.length; i++) {
-        if (routeKey === routeList[i].key) {
-            var route = JSON.parse(JSON.stringify(routeList[i]));
-            return route;
-        }
-    }
+function getRoutesByCriteria(criteria) {
+    var route;
+    criteria.forEach(function (input) {
+    });
+    return route;
 }
-function getRouteByLocTime(routeType, routeTime) {
-    for (var i = 0; i < routeList.length; i++) {
-        if (routeType === routeList[i].routeLocation && routeTime === routeList[i].routeTime) {
-            var route = JSON.parse(JSON.stringify(routeList[i]));
-            return route;
-        }
-    }
-}
-var Route = (function () {
-    function Route(name, time, loc, key, fish) {
-        this.routeName = name;
-        this.routeTime = time;
-        this.fishType = fish;
-        this.routeLocation = loc;
+var Anchor = (function () {
+    function Anchor(key, datetime) {
         this.key = key;
+        this.datetime = dayjs(datetime);
     }
-    return Route;
+    return Anchor;
 }());
-export { Route };
+export { Anchor };
 var Period = (function () {
     function Period(start, end) {
         this.start = start;
@@ -209,3 +184,12 @@ var Period = (function () {
     return Period;
 }());
 export { Period };
+var Solution = (function () {
+    function Solution(key, displayTime) {
+        this.key = key;
+        this.displayTime = displayTime;
+    }
+    return Solution;
+}());
+export { Solution };
+//# sourceMappingURL=routeFinder.js.map

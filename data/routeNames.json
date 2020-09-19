@@ -1,0 +1,26 @@
+{
+    "names": [{
+        "key": "sunsetMerlthor",
+        "displayname": "Northern by Sunset (Dragon)"
+    },
+    {
+        "key": "nightMerlthor",
+        "displayname": "Northern by Night (Octo)"
+    },
+    {
+        "key": "dayMerlthor",
+        "displayname": "Northern by Day (Blue-3)"
+    },
+    {
+        "key": "sunsetRhotano",
+        "displayname": "Rhotano by Sunset (Blue-4)"
+    },
+    {
+        "key": "nightRhotano",
+        "displayname": "Rhotano by Night (Jelly)"
+    },
+    {
+        "key": "dayRhotano",
+        "displayname": "Rhotano by Day (Shark)"
+    }]
+}

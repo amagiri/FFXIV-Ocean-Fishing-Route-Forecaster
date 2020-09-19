@@ -18,23 +18,11 @@ import * as rf from "./routeFinder.js";
 })();
 
 // Validates form inputs on submit
-function formValidation(routeList: rf.Route[], refRoute: rf.Route) {
-    // If references are not ready, return an error
-    if (routeList.length === 0 || refRoute == undefined) {
-        alert('REEEEEEE');
-        return;
-    }
-
+function formValidation(refRoute: rf.Anchor) {
     // If no checkboxes are selected, return an error
-    var inputCheck: boolean = false;
-    $('input[type="checkbox"]').each(function() {
-        if ($(this).prop("checked"))
-            inputCheck = true;
-    })
-
-    if(!inputCheck) {
+    if ($('input[type="checkbox"]').filter(':checked').length === 0) {
         alert('No routes selected.');
-        return inputCheck;
+        return;
     }
 
     // Browser seems to check if datetime-local is filled correctly, so I won't touch on that.
@@ -56,15 +44,15 @@ function formValidation(routeList: rf.Route[], refRoute: rf.Route) {
         return false;
     }
 
-    return inputCheck;
+    return true;
 }
 
 // Main function
-function getSpecifiedRoutes(refRoute: rf.Route) {
+function getSpecifiedRoutes(refRoute: rf.Anchor) {
     const inputKeys: string[] = getRouteInputs();
     var inputTimespan: rf.Period = getDateInputs();
     
-    const validRoutes: rf.Route[] = rf.default(refRoute, inputKeys, inputTimespan);
+    const validRoutes: rf.Solution[] = rf.default(refRoute, inputKeys, inputTimespan);
     displayRoutes(validRoutes);
 }
 
@@ -89,18 +77,46 @@ function getDateInputs() {
 }
 
 // Displays routes in the results section
-function displayRoutes(routeList: rf.Route[]) {
+async function displayRoutes(results: rf.Solution[]) {
+    // Import JSON for mapping keys to display names
+    var nameMap = new Map<string, string>(); // Store a mapping of keywords to display names
+    try {
+        const nameResponse = await fetch('data/routeNames.json');
+        const parsedNames = await nameResponse.json();
+        mapDisplayNames(parsedNames, nameMap);
+    } catch (error) {
+        console.error(error);
+        alert('Request failed');
+        return;
+    }
+
     const $results = $('#results tbody');
     $results.text('');  // Clear out old results
 
-    routeList.forEach((route) => {
-        const jsDate: Date = route.datetime.toDate();
-
-        const $routeCell = $('<td></td>').text(route.routeName);
-        const $timeCell = $('<td></td>').text(jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'}));
+    results.forEach((route) => {
+        const $routeCell = $('<td></td>').text(nameMap.get(route.key));
+        const $timeCell = $('<td></td>').text(route.displayTime);
         const $row = $('<tr></tr>').append($routeCell).append($timeCell);
         $results.append($row);
     })
+}
+
+// Maps keywords to display names
+function mapDisplayNames(parsedNames: NameList, nameMap: Map<string, string>) {
+    parsedNames.names.forEach((value) => {
+        nameMap.set(value.key, value.displayname);
+    })
+}
+
+
+/* JSON IMPORT INTERFACES */
+interface NameList {
+    names: NameKeyPair[];
+}
+
+interface NameKeyPair {
+    key: string;
+    displayname: string;
 }
 
 
@@ -108,10 +124,9 @@ function displayRoutes(routeList: rf.Route[]) {
 $('#routeForm').on('submit', function(event) {
     event.preventDefault();
 
-    const routeList = rf.routeList;
     const refRoute = rf.refRoute;
 
-    if(!formValidation(routeList, refRoute)) {
+    if(!formValidation(refRoute)) {
         return;
     }
 

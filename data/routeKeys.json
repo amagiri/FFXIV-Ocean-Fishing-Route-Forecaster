@@ -1,0 +1,55 @@
+{
+    "keywords": [
+    {
+        "name": "dragon",
+        "routes": ["sunsetMerlthor"]
+    },
+    {
+        "name": "octo",
+        "routes": ["nightMerlthor"]
+    }, 
+    {
+        "name": "blue-3",
+        "routes": ["dayMerlthor"]
+    },
+    {
+        "name": "blue-4",
+        "routes": ["sunsetRhotano"]
+    },
+    {
+        "name": "jelly",
+        "routes": ["nightRhotano"]
+    },
+    {
+        "name": "shark",
+        "routes": ["dayRhotano"]
+    },
+    {
+        "name": "day",
+        "routes": ["dayMerlthor", "dayRhotano"]
+    },
+    {
+        "name": "sunset",
+        "routes": ["sunsetMerlthor", "sunsetRhotano"]
+    },
+    {
+        "name": "night",
+        "routes": ["nightMerlthor", "nightRhotano"]
+    },
+    {
+        "name": "sothis",
+        "routes": ["dayMerlthor", "sunsetRhotano"]
+    },
+    {
+        "name": "coralmanta",
+        "routes": ["sunsetMerlthor", "dayRhotano"]
+    },
+    {
+        "name": "elasmosaurus",
+        "routes": ["dayMerlthor"]
+    },
+    {
+        "name": "stonescale",
+        "routes": ["sunsetRhotano"]
+    }]
+}
