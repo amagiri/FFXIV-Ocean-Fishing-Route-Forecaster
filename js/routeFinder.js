@@ -1,16 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -79,12 +66,11 @@ function mapRouteIdentifiers(parsedRoutes) {
         routeMap.set(value.name, value.routes);
     });
 }
-export default function main(refRoute, inputKeys, inputTimespan, inputRange) {
+export default function main(refRoute, inputKeys, inputTimespan) {
     var validKeys = convertKeys(inputKeys);
     adjustTimespan(refRoute, inputTimespan);
-    var validHours = filterHours(refRoute, inputRange);
     var totalRoutes = findAllRoutes(inputTimespan);
-    var validRoutes = filterRoutes(totalRoutes, validKeys, validHours);
+    var validRoutes = filterRoutes(totalRoutes, validKeys);
     return validRoutes;
 }
 function convertKeys(inputKeys) {
@@ -122,18 +108,6 @@ function adjustTimespan(refRoute, timespan) {
     if (((timespan.end.hour() - refHour) % 2) != 0) {
         timespan.end = timespan.end.subtract(1, 'hour');
     }
-}
-function filterHours(refRoute, inputRange) {
-    var validHours = new Array();
-    var refHour = refRoute.datetime.hour();
-    var currentHour = inputRange.start;
-    while (currentHour <= inputRange.end) {
-        if (Math.abs(currentHour - refHour) % 2 === 0) {
-            validHours.push(currentHour);
-        }
-        currentHour++;
-    }
-    return validHours;
 }
 function findAllRoutes(timespan) {
     var outputRoutes = new Array();
@@ -198,26 +172,19 @@ function getRoute(refRoute, inputTime) {
             console.log('LOL SHRUG');
             break;
     }
-    var currentHour = inputTime.hour();
     var currentRoute = hourlyTime.concat(hourlyRoute);
     var jsDate = inputTime.toDate();
     var displayDate = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });
-    return new RawSolution(currentRoute, displayDate, currentHour);
+    return new Solution(currentRoute, displayDate);
 }
-function filterRoutes(routeList, inputKeys, validHours) {
+function filterRoutes(routeList, inputKeys) {
     var filteredRoutes = new Array();
     routeList.forEach(function (route) {
-        if (inputKeys.includes(route.key) && validHours.includes(route.hour)) {
+        if (inputKeys.includes(route.key)) {
             filteredRoutes.push(route);
         }
     });
     return filteredRoutes;
-}
-function getRoutesByCriteria(criteria) {
-    var route;
-    criteria.forEach(function (input) {
-    });
-    return route;
 }
 var Anchor = (function () {
     function Anchor(key, datetime) {
@@ -243,21 +210,4 @@ var Solution = (function () {
     return Solution;
 }());
 export { Solution };
-var RawSolution = (function (_super) {
-    __extends(RawSolution, _super);
-    function RawSolution(key, displayTime, hour) {
-        var _this = _super.call(this, key, displayTime) || this;
-        _this.hour = hour;
-        return _this;
-    }
-    return RawSolution;
-}(Solution));
-var Range = (function () {
-    function Range(start, end) {
-        this.start = start;
-        this.end = end;
-    }
-    return Range;
-}());
-export { Range };
 //# sourceMappingURL=routeFinder.js.map

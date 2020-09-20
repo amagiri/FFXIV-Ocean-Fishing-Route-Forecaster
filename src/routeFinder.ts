@@ -27,13 +27,12 @@ function mapRouteIdentifiers(parsedRoutes: KeyList) {
 
 
 /* MAIN FUNCTION */
-export default function main(refRoute: Anchor, inputKeys: string[], inputTimespan: Period, inputRange: Range) {
+export default function main(refRoute: Anchor, inputKeys: string[], inputTimespan: Period) {
     const validKeys = convertKeys(inputKeys);
     adjustTimespan(refRoute, inputTimespan);    // Adjust timespan relative to the reference so that it starts and ends on a route time
-    var validHours: number[] = filterHours(refRoute, inputRange);
 
     var totalRoutes = findAllRoutes(inputTimespan);
-    var validRoutes = filterRoutes(totalRoutes, validKeys, validHours);
+    var validRoutes = filterRoutes(totalRoutes, validKeys);
 
     return validRoutes;
 }
@@ -85,25 +84,9 @@ function adjustTimespan(refRoute: Anchor, timespan: Period) {
     }
 }
 
-function filterHours(refRoute: Anchor, inputRange: Range) {
-    var validHours: number[] = new Array();
-    const refHour = refRoute.datetime.hour();
-    var currentHour = inputRange.start;
-
-    while (currentHour <= inputRange.end) {
-        if (Math.abs(currentHour - refHour) % 2 === 0) {    // If the time is apart by a multiple of two, then it is a valid route hour
-            validHours.push(currentHour);     
-        }
-        currentHour++;
-    }
-
-    return validHours;
-}
-
-
 // Finds all routes
-function findAllRoutes(timespan: Period): RawSolution[] {
-    var outputRoutes: RawSolution[] = new Array();
+function findAllRoutes(timespan: Period): Solution[] {
+    var outputRoutes: Solution[] = new Array();
     var currentTime: Dayjs = timespan.start;
 
     while (timespan.end.diff(currentTime) >= 0) {
@@ -115,7 +98,7 @@ function findAllRoutes(timespan: Period): RawSolution[] {
     return outputRoutes;
 }
 
-function getRoute(refRoute: Anchor, inputTime: Dayjs): RawSolution {
+function getRoute(refRoute: Anchor, inputTime: Dayjs): Solution {
     const timeElapsed: number = inputTime.diff(refRoute.datetime);
     const hourConversion = 1000 * 60 * 60;
     const totalHours = timeElapsed/hourConversion;  // This should always be a whole number due to our earlier rounding
@@ -175,19 +158,18 @@ function getRoute(refRoute: Anchor, inputTime: Dayjs): RawSolution {
             break;
     }
 
-    const currentHour = inputTime.hour();
     const currentRoute = hourlyTime.concat(hourlyRoute);    // Generate the keyword for the given combination
     const jsDate: Date = inputTime.toDate();    // Convert dayjs object back to JavaScript Date object
     const displayDate: string = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'});    // Convert to string
 
-    return new RawSolution(currentRoute, displayDate, currentHour);
+    return new Solution(currentRoute, displayDate);
 }
 
-function filterRoutes(routeList: RawSolution[], inputKeys: string[], validHours: number[]) {
+function filterRoutes(routeList: Solution[], inputKeys: string[]) {
     var filteredRoutes: Solution[] = new Array();
 
     routeList.forEach((route) => {
-        if (inputKeys.includes(route.key) && validHours.includes(route.hour)) {
+        if (inputKeys.includes(route.key)) {
             filteredRoutes.push(route);
         }
     })
@@ -195,16 +177,6 @@ function filterRoutes(routeList: RawSolution[], inputKeys: string[], validHours:
     return filteredRoutes;
 }
 
-
-/* UTILITY FUNCTIONS */
-function getRoutesByCriteria(criteria: string[]): string | string[] {
-    var route: string;
-    criteria.forEach((input) => {
-
-    })
-
-    return route;
-}
 
 /* CLASS DECLARATIONS */
 export class Anchor {
@@ -234,25 +206,6 @@ export class Solution {
     constructor(key: string, displayTime: string) {
         this.key = key;
         this.displayTime = displayTime;
-    }
-}
-
-class RawSolution extends Solution {
-    hour: number;
-
-    constructor(key: string, displayTime: string, hour: number) {
-        super(key, displayTime);
-        this.hour = hour;
-    }
-}
-
-export class Range {
-    start: number;
-    end: number;
-
-    constructor(start: number, end: number) {
-        this.start = start;
-        this.end = end;
     }
 }
 

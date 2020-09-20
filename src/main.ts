@@ -62,9 +62,8 @@ function formValidation(refRoute: rf.Anchor) {
 function getSpecifiedRoutes(refRoute: rf.Anchor) {
     const inputKeys: string[] = getRouteInputs();
     var inputTimespan: rf.Period = getDateInputs();
-    var inputRange = new rf.Range(0, 23);   // This is currently not supported on the web, so these are default values
     
-    const validRoutes: rf.Solution[] = rf.default(refRoute, inputKeys, inputTimespan, inputRange);
+    const validRoutes: rf.Solution[] = rf.default(refRoute, inputKeys, inputTimespan);
     displayRoutes(validRoutes);
 }
 

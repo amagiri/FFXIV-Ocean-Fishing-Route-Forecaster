@@ -75,8 +75,7 @@ function formValidation(refRoute) {
 function getSpecifiedRoutes(refRoute) {
     var inputKeys = getRouteInputs();
     var inputTimespan = getDateInputs();
-    var inputRange = new rf.Range(0, 23);
-    var validRoutes = rf["default"](refRoute, inputKeys, inputTimespan, inputRange);
+    var validRoutes = rf["default"](refRoute, inputKeys, inputTimespan);
     displayRoutes(validRoutes);
 }
 function getRouteInputs() {
