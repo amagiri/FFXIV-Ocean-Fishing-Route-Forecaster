@@ -73,13 +73,13 @@ function adjustTimespan(refRoute: Anchor, timespan: Period) {
     timespan.end = timespan.end.minute(0);   
 
     // Adjust start and end times as necessary so that they are in increments of 2 from the reference
-    const refHour = refRoute.datetime.hour();
-
-    if (((timespan.start.hour() - refHour) % 2) != 0) {
+    const startHourDiff = timespan.start.subtract(refRoute.datetime).hour();
+    if ((startHourDiff % 2) != 0) {
         timespan.start = timespan.start.add(1, 'hour'); // Increment one hour if the difference is odd
     }
 
-    if (((timespan.end.hour() - refHour) % 2) != 0) {
+    const endHourDiff = timespan.start.subtract(refRoute.datetime).hour();
+    if ((endHourDiff % 2) != 0) {
         timespan.end = timespan.end.subtract(1, 'hour'); // Decrement one hour if the difference is odd
     }
 }

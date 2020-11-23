@@ -101,11 +101,12 @@ function adjustTimespan(refRoute, timespan) {
     timespan.end = timespan.end.minute(0);
     timespan.end = timespan.end.second(0);
     timespan.end = timespan.end.minute(0);
-    var refHour = refRoute.datetime.hour();
-    if (((timespan.start.hour() - refHour) % 2) != 0) {
+    var startHourDiff = timespan.start.subtract(refRoute.datetime).hour();
+    if ((startHourDiff % 2) != 0) {
         timespan.start = timespan.start.add(1, 'hour');
     }
-    if (((timespan.end.hour() - refHour) % 2) != 0) {
+    var endHourDiff = timespan.start.subtract(refRoute.datetime).hour();
+    if ((endHourDiff % 2) != 0) {
         timespan.end = timespan.end.subtract(1, 'hour');
     }
 }
