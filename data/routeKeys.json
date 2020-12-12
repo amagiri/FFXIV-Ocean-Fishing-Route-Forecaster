@@ -25,16 +25,28 @@
         "routes": ["dayRhotano"]
     },
     {
+        "name": "crab",
+        "routes": ["dayBloodbrine"]
+    },
+    {
+        "name": "puffer",
+        "routes": ["dayRothlyt"]
+    },
+    {
+        "name": "manta",
+        "routes": ["dayRothlyt", "nightBloodbrine"]
+    },
+    {
         "name": "day",
-        "routes": ["dayMerlthor", "dayRhotano"]
+        "routes": ["dayMerlthor", "dayRhotano", "dayBloodbrine", "dayRothlyt"]
     },
     {
         "name": "sunset",
-        "routes": ["sunsetMerlthor", "sunsetRhotano"]
+        "routes": ["sunsetMerlthor", "sunsetRhotano", "sunsetBloodbrine", "sunsetRothlyt"]
     },
     {
         "name": "night",
-        "routes": ["nightMerlthor", "nightRhotano"]
+        "routes": ["nightMerlthor", "nightRhotano", "nightBloodbrine", "nightRothlyt"]
     },
     {
         "name": "sothis",
@@ -51,5 +63,17 @@
     {
         "name": "stonescale",
         "routes": ["sunsetRhotano"]
-    }]
+    },
+	{
+		"name": "hafgufa",
+		"routes": ["sunsetRothlyt", "sunsetBloodbrine"]
+	},
+	{
+		"name": "seafaring toad",
+		"routes": ["dayBloodbrine"]
+	},
+	{
+		"name": "placodus",
+		"routes": ["sunsetRothlyt"]
+	}]
 }
