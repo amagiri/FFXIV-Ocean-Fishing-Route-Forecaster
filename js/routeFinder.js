@@ -50,7 +50,7 @@ export function setup() {
                 case 2:
                     parsedKeys = _a.sent();
                     mapRouteIdentifiers(parsedKeys);
-                    refRoute = new Anchor("sunsetMerlthor", "2020-09-03T16:00:00.000Z");
+                    refRoute = new Anchor("dayBloodbrine", "2020-12-08T16:00:00.000Z");
                     return [3, 4];
                 case 3:
                     error_1 = _a.sent();
@@ -125,54 +125,11 @@ function getRoute(refRoute, inputTime) {
     var totalHours = timeElapsed / hourConversion;
     var daysElapsed = Math.floor(totalHours / 24);
     var hoursPassed = totalHours % 24;
-    var dailySchedule = ['sunset', 'sunset', 'night', 'night', 'day', 'day'];
-    var sailingRoutes = ['Merlthor', 'Rhotano'];
-    var sailingTimes = ['sunset', 'night', 'day'];
-    var dailyStartTime = dailySchedule[daysElapsed % 6];
-    var dailyStartRoute = sailingRoutes[daysElapsed % 2];
-    var hourlyRoute;
-    if (hoursPassed % 4 > 0) {
-        var filteredRoute = sailingRoutes.slice(0);
-        filteredRoute.splice(filteredRoute.indexOf(dailyStartRoute), 1);
-        hourlyRoute = filteredRoute[0];
-    }
-    else {
-        hourlyRoute = dailyStartRoute;
-    }
-    var hourlyTime;
-    switch (hoursPassed % 12) {
-        case 0:
-        case 2:
-            hourlyTime = dailyStartTime;
-            break;
-        case 4:
-        case 6:
-            var skip = 1;
-            if ((sailingTimes.indexOf(dailyStartTime) + skip) < sailingTimes.length) {
-                var i = sailingTimes.indexOf(dailyStartTime) + skip;
-                hourlyTime = sailingTimes[i];
-            }
-            else {
-                var i = sailingTimes.indexOf(dailyStartTime) - (sailingTimes.length - skip);
-                hourlyTime = sailingTimes[i];
-            }
-            break;
-        case 8:
-        case 10:
-            var skip = 2;
-            if ((sailingTimes.indexOf(dailyStartTime) + skip) < sailingTimes.length) {
-                var i = sailingTimes.indexOf(dailyStartTime) + skip;
-                hourlyTime = sailingTimes[i];
-            }
-            else {
-                var i = sailingTimes.indexOf(dailyStartTime) - (sailingTimes.length - skip);
-                hourlyTime = sailingTimes[i];
-            }
-            break;
-        default:
-            console.log('LOL SHRUG');
-            break;
-    }
+    var routesElapsed = hoursPassed / 2;
+    var sailingRoutes = ['Bloodbrine', 'Rothlyt', 'Merlthor', 'Rhotano'];
+    var sailingTimes = ['day', 'sunset', 'night'];
+    var hourlyRoute = sailingRoutes[(daysElapsed + routesElapsed) % 4];
+    var hourlyTime = sailingTimes[Math.floor((daysElapsed + routesElapsed) / 4) % 3];
     var currentRoute = hourlyTime.concat(hourlyRoute);
     var jsDate = inputTime.toDate();
     var displayDate = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' });

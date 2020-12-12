@@ -12,7 +12,8 @@
 	</head>
 	<body>
 		<h2>FFXIV Ocean Fishing Route Forecaster</h2>
-		Credit to <a href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis 
+		<p>Credit to <a href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis.</p>
+		<p>12/12/2020: Added Patch 5.4 routes and fish with preliminary title route suggestions.</p>
 		<form id="routeForm">
 			<h3>Select Conditions</h3>
 			<div class="route">
@@ -26,12 +27,28 @@
 						<label for="sunsetRhotano">Rhotano by Sunset (Blue-4)</label>
 					</li>
 					<li>
+						<input type="checkbox" id="sunsetBloodbrine" checked>
+						<label for="sunsetBloodbrine">Bloodbrine by Sunset</label>
+					</li>
+					<li>
+						<input type="checkbox" id="sunsetRothlyt" checked>
+						<label for="sunsetRothlyt">Rothlyt by Sunset</label>
+					</li>
+					<li>
 						<input type="checkbox" id="nightMerlthor" checked>
 						<label for="nightMerlthor">Northern by Night (Octo)</label>
 					</li>
 					<li>
 						<input type="checkbox" id="nightRhotano" checked>
 						<label for="nightRhotano">Rhotano by Night (Jelly)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightBloodbrine" checked>
+						<label for="nightBloodbrine">Bloodbrine by Night (Manta)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightRothlyt" checked>
+						<label for="nightRothlyt">Rothlyt by Night</label>
 					</li>
 					<li>				
 						<input type="checkbox" id="dayMerlthor" checked>
@@ -40,6 +57,14 @@
 					<li>
 						<input type="checkbox" id="dayRhotano" checked>
 						<label for="dayRhotano">Rhotano by Day (Shark)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayBloodbrine" checked>
+						<label for="dayBloodbrine">Bloodbrine by Day (Crab)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayRothlyt" checked>
+						<label for="dayRothlyt">Rothlyt by Day (Manta, Puffer)</label>
 					</li>
 				</ul>
 			</div>
@@ -62,6 +87,18 @@
 					<li>
 						<input type="checkbox" id="stonescale" checked>
 						<label for="stonescale">Stonescale</label>
+					</li>
+					<li>
+						<input type="checkbox" id="hafgufa" checked>
+						<label for="hafgufa">Hafgufa</label>
+					</li>
+					<li>
+						<input type="checkbox" id="toad" checked>
+						<label for="toad">Seafaring Toad</label>
+					</li>
+					<li>
+						<input type="checkbox" id="placodus" checked>
+						<label for="placodus">Placodus</label>
 					</li>
 				</ul>
 	

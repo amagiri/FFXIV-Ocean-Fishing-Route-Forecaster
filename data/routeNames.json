@@ -22,5 +22,29 @@
     {
         "key": "dayRhotano",
         "displayname": "Rhotano by Day (Shark)"
-    }]
+    },
+	{
+		"key": "sunsetBloodbrine",
+		"displayname": "Bloodbrine by Sunset"
+	},
+	{
+		"key": "nightBloodbrine",
+		"displayname": "Bloodbrine by Night (Manta)"
+	},
+	{
+		"key": "dayBloodbrine",
+		"displayname": "Bloodbrine by Day (Crab)"
+	},
+		{
+		"key": "sunsetRothlyt",
+		"displayname": "Rothlyt by Sunset"
+	},
+	{
+		"key": "nightRothlyt",
+		"displayname": "Rothlyt by Night"
+	},
+	{
+		"key": "dayRothlyt",
+		"displayname": "Rothlyt by Day (Manta, Puffer)"
+	}]
 }
