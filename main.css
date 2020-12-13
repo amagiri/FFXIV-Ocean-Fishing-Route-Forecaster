@@ -36,17 +36,21 @@ form {
 
 ul {
   text-align: left;
-  margin: auto;
-  max-width: 760px;
 }
 
 ul#routeInputs {
+  text-align: left;
+  margin: auto;
+  max-width: 760px;
   columns: 3;
   -webkit-columns: 3;
   -moz-columns: 3;
 }
 
 ul#fishInputs {
+  text-align: left;
+  margin: auto;
+  max-width: 760px;
   columns: 4;
   -webkit-columns: 4;
   -moz-columns: 4;
@@ -80,6 +84,123 @@ td, th {
 
 td:first-child {
   text-align: right;
+}
+
+/* GUIDE */
+.fish-pool {
+  margin: auto;
+  padding: 0 1rem;
+  max-width: 1280px;
+}
+
+.fish-info {
+  margin: 1px;
+}
+
+.fish-name {
+  text-align: left;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  width: 16.6667% !important;
+}
+
+.fish-name img {
+  width: 32px;
+  margin-right: 8px;
+}
+
+.dh {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  width: 2.5rem !important;
+}
+
+.progress {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 8px 1rem 0 !important;
+}
+
+.weather {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.weather img {
+  height: 24px;
+  margin: auto;
+}
+
+.empty {
+  background-color: #E9ECEF !important;
+}
+
+/* full width of progress bar is 36s */
+.t-36 {
+  width: 100%;
+}
+
+.t-30 {
+  width: 83.3333%;
+}
+
+.t-27 {
+  width: 75%;
+}
+
+.t-24 {
+  width: 66.6667%;
+}
+
+.t-21 {
+  width: 58.3333%;
+}
+
+.t-18 {
+  width: 50%;
+}
+
+.t-15 {
+  width: 41.6667%;
+}
+
+.t-12 {
+  width: 33.3333%;
+}
+
+.t-9 {
+  width: 25%;
+}
+
+.t-6 {
+  width: 16.6667%;
+}
+
+.t-5 {
+  width: 13.8889%;
+}
+
+.t-4 {
+  width: 11.1111%;
+}
+
+.t-3 {
+  width: 8.3333%;
+}
+
+.t-2 {
+  width: 5.5556%;
+}
+
+.t-1 {
+  width: 2.7778%;
 }
 
 /* REPSONSIVE */

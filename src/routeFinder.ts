@@ -120,54 +120,6 @@ function getRoute(refRoute: Anchor, inputTime: Dayjs): Solution {
     const hourlyRoute = sailingRoutes[(daysElapsed + routesElapsed) % 4];  // Each day past the anchor counts as an increment of 1 to the sailingRoutes array because of the routes shifting in time
     const hourlyTime = sailingTimes[Math.floor((daysElapsed + routesElapsed)/4) % 3]; // Each day past the anchor causes the weather to change one hour sooner
 
-    // const dailyStartTime = dailySchedule[daysElapsed % 6];
-    // const dailyStartRoute = sailingRoutes[daysElapsed % 2];
-    
-    // var hourlyRoute: string;
-    // if (hoursPassed % 4 > 0) {  // 2 for flip, 0 for matching route
-    //     var filteredRoute = sailingRoutes.slice(0);
-    //     filteredRoute.splice(filteredRoute.indexOf(dailyStartRoute), 1);
-    //     hourlyRoute = filteredRoute[0];
-    // }
-    // else {
-    //     hourlyRoute = dailyStartRoute;
-    // }
-
-    // var hourlyTime: string;
-    // switch (hoursPassed % 12) {
-    //     case 0:
-    //     case 2:
-    //         hourlyTime = dailyStartTime;
-    //         break;
-    //     case 4:
-    //     case 6:
-    //         var skip = 1;
-    //         if ((sailingTimes.indexOf(dailyStartTime) + skip) < sailingTimes.length) {
-    //             let i: number = sailingTimes.indexOf(dailyStartTime) + skip;
-    //             hourlyTime = sailingTimes[i];
-    //         }
-    //         else {
-    //             let i: number = sailingTimes.indexOf(dailyStartTime) - (sailingTimes.length - skip);    // Looping
-    //             hourlyTime = sailingTimes[i];
-    //         }
-    //         break;
-    //     case 8:
-    //     case 10:
-    //         var skip = 2;
-    //         if ((sailingTimes.indexOf(dailyStartTime) + skip) < sailingTimes.length) {
-    //             let i: number = sailingTimes.indexOf(dailyStartTime) + skip;
-    //             hourlyTime = sailingTimes[i];
-    //         }
-    //         else {
-    //             let i: number = sailingTimes.indexOf(dailyStartTime) - (sailingTimes.length - skip);    // Looping
-    //             hourlyTime = sailingTimes[i];
-    //         }
-    //         break;
-    //     default:
-    //         console.log('LOL SHRUG');
-    //         break;
-    // }
-
     const currentRoute = hourlyTime.concat(hourlyRoute);    // Generate the keyword for the given combination
     const jsDate: Date = inputTime.toDate();    // Convert dayjs object back to JavaScript Date object
     const displayDate: string = jsDate.toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: '2-digit', minute:'2-digit', hour12: true, timeZoneName: 'short'});    // Convert to string
