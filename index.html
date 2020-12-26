@@ -1,402 +1,162 @@
 <html>
-
-<head>
-	<meta charset="UTF-8">
-	<title>FFXIV Ocean Fishing Route Forecaster</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com/ https://fonts.gstatic.com/; 
+	<head>
+		<meta charset="UTF-8">
+		<title>FFXIV Ocean Fishing Route Forecaster</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Security-Policy" 
+		content="default-src 'self' https://cdn.jsdelivr.net; 
 				 script-src 'self' https://code.jquery.com/ https://unpkg.com/ https://cdn.jsdelivr.net 'unsafe-inline'" />
 
-	<link rel="stylesheet" href="./src/main.scss">
-	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-	<link rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet"> -->
+		<link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
 	</head>
+	<body>
+		<h2>FFXIV Ocean Fishing Route Forecaster</h2>
+		<p>Credit to <a href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis.</p>
+		<p>12/12/2020: Added Patch 5.4 routes and fish with preliminary title route suggestions.</p>
+		<form id="routeForm">
+			<h3>Select Conditions</h3>
+			<div class="route">
+				<ul id="routeInputs">
+					<li>
+						<input type="checkbox" id="sunsetMerlthor" checked>
+						<label for="sunsetMerlthor">Northern by Sunset (Dragon)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="sunsetRhotano" checked>
+						<label for="sunsetRhotano">Rhotano by Sunset (Blue-4)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="sunsetBloodbrine" checked>
+						<label for="sunsetBloodbrine">Bloodbrine by Sunset</label>
+					</li>
+					<li>
+						<input type="checkbox" id="sunsetRothlyt" checked>
+						<label for="sunsetRothlyt">Rothlyt by Sunset</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightMerlthor" checked>
+						<label for="nightMerlthor">Northern by Night (Octo)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightRhotano" checked>
+						<label for="nightRhotano">Rhotano by Night (Jelly)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightBloodbrine" checked>
+						<label for="nightBloodbrine">Bloodbrine by Night (Manta)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="nightRothlyt" checked>
+						<label for="nightRothlyt">Rothlyt by Night (Puffer)</label>
+					</li>
+					<li>				
+						<input type="checkbox" id="dayMerlthor" checked>
+						<label for="dayMerlthor">Northern by Day (Blue-3)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayRhotano" checked>
+						<label for="dayRhotano">Rhotano by Day (Shark)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayBloodbrine" checked>
+						<label for="dayBloodbrine">Bloodbrine by Day (Crab)</label>
+					</li>
+					<li>
+						<input type="checkbox" id="dayRothlyt" checked>
+						<label for="dayRothlyt">Rothlyt by Day (Manta)</label>
+					</li>
+				</ul>
+			</div>
 
-<body>
-	<div id="header">
-		<div class="float-start test">
-			<i class="material-icons">menu</i>
-		</div>		
-		<div class="test">
-			<h2>FFXIV Ocean Fishing Route Forecaster</h2>
-		</div>
-	</div>
-	<p>Credit to <a
-			href="https://docs.google.com/spreadsheets/d/1brCfvmSdYl7RcY9lkgm_ds8uaFqq7qaxOOz-5BfHuuk/htmlview#">The
-			Ocean Fishing Spreadsheet</a> by S'yahn Tia on Cactuar for route analysis.</p>
-	<p>12/12/2020: Added Patch 5.4 routes and fish with preliminary title route suggestions.</p>
+			<h3>Select Blue Fish</h3>
+			<div class="route">
+				<ul id="fishInputs">
+					<li>
+						<input type="checkbox" id="sothis" checked>
+						<label for="sothis">Sothis</label>
+					</li>
+					<li>
+						<input type="checkbox" id="coralmanta" checked>
+						<label for="coralmanta">Coral Manta</label>
+					</li>
+					<li>
+						<input type="checkbox" id="elasmosaurus" checked>
+						<label for="elasmosaurus">Elasmosaurus</label>
+					</li>
+					<li>
+						<input type="checkbox" id="stonescale" checked>
+						<label for="stonescale">Stonescale</label>
+					</li>
+					<li>
+						<input type="checkbox" id="hafgufa" checked>
+						<label for="hafgufa">Hafgufa</label>
+					</li>
+					<li>
+						<input type="checkbox" id="seafaring-toad" checked>
+						<label for="toad">Seafaring Toad</label>
+					</li>
+					<li>
+						<input type="checkbox" id="placodus" checked>
+						<label for="placodus">Placodus</label>
+					</li>
+				</ul>
+	
+				<button type="button" id="clearAll">Deselect All</button>
+				<button type="button" id="clearRoute">Deselect Conditions</button>
+				<button type="button" id="clearFish">Deselect Fish</button>
+			</div>
 
-	<p>
-		<button class="btn btn-menu" type="button" data-bs-toggle="collapse" data-bs-target="#routeFilters"
-			aria-expanded="false" aria-controls="collapseExample">
-			Filters
-		</button>
-	</p>
-	<div id="routeFilters" class="collapse">
-		<div class="row g-2">
-			<div class="col-lg">
-				<h5>Routes</h5>
-				<div class="crit-section">
-					<table class="table table-hover table-striped text-center">
-						<thead>
-							<tr>
-								<th scope="col">Route</th>
-								<th scope="col" class="icon"><img src="./img/weather-icons/wi-day-sunny.svg"></th>
-								<th scope="col" class="icon"><img src="img/weather-icons/wi-horizon.svg"></th>
-								<th scope="col" class="icon"><img src="img/weather-icons/wi-night-clear.svg"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope="row" class="text-end align-middle">Open Bloodbrine Sea</th>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="dayBloodbrine" autocomplete="off" aria-labelledby="dayBloodbrine-title">
-									<label class="btn" for="dayBloodbrine">
-										<span id="dayBloodbrine-title" class="visually-hidden">Open Bloodbrine Sea at Day</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="sunsetBloodbrine" autocomplete="off" aria-labelledby="sunsetBloodbrine-title">
-									<label class="btn" for="sunsetBloodbrine">
-										<span id="sunsetBloodbrine-title" class="visually-hidden">Open Bloodbrine Sea at Sunset</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="nightBloodbrine" autocomplete="off" aria-labelledby="nightBloodbrine-title">
-									<label class="btn" for="nightBloodbrine">
-										<span id="nightBloodbrine-title" class="visually-hidden">Open Bloodbrine Sea at Night</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="text-end align-middle">Outer Rothlyt Sound</th>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="dayRothlyt" autocomplete="off" aria-labelledby="dayRothlyt-title">
-									<label class="btn" for="dayRothlyt">
-										<span id="dayRothlyt-title" class="visually-hidden">Outer Rothlyt Sound at Day</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="sunsetRothlyt" autocomplete="off" aria-labelledby="sunsetRothlyt-title">
-									<label class="btn" for="sunsetRothlyt">
-										<span id="sunsetRothlyt-title" class="visually-hidden">Outer Rothlyt Sound at Sunset</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="nightRothlyt" autocomplete="off" aria-labelledby="nightRothlyt-title">
-									<label class="btn" for="nightRothlyt">
-										<span id="nightRothlyt-title" class="visually-hidden">Outer Rothlyt Sound at Night</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="text-end align-middle">Northern Strait of Merlthor</th>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="dayMerlthor" autocomplete="off" aria-labelledby="dayMerlthor-title">
-									<label class="btn" for="dayMerlthor">
-										<span id="dayMerlthor-title" class="visually-hidden">Northern Strait of Merlthor at Day</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="sunsetMerlthor" autocomplete="off" aria-labelledby="sunsetMerlthor-title">
-									<label class="btn" for="sunsetMerlthor">
-										<span id="sunsetMerlthor-title" class="visually-hidden">Northern Strait of Merlthor at Sunset</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="nightMerlthor" autocomplete="off" aria-labelledby="nightMerlthor-title">
-									<label class="btn" for="nightMerlthor">
-										<span id="nightMerlthor-title" class="visually-hidden">Northern Strait of Merlthor at Night</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="text-end align-middle">Open Rhotano Sea</th>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="dayRhotano" autocomplete="off" aria-labelledby="dayRhotano-title">
-									<label class="btn" for="dayRhotano">
-										<span id="dayRhotano-title" class="visually-hidden">Open Rhotano Sea at Day</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="sunsetRhotano" autocomplete="off" aria-labelledby="sunsetRhotano-title">
-									<label class="btn" for="sunsetRhotano">
-										<span id="sunsetRhotano-title" class="visually-hidden">Open Rhotano Sea at Sunset</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-								<td class="align-middle">
-									<input type="checkbox" class="btn-check" id="nightRhotano" autocomplete="off" aria-labelledby="nightRhotano-title">
-									<label class="btn" for="nightRhotano">
-										<span id="nightRhotano-title" class="visually-hidden">Open Rhotano Sea at Night</span>
-										<i class="material-icons">add_circle</i>
-									</label>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+			<h3>Select Times and Dates</h3>
+			<div class="range">
+				<div class="dateOption">				
+					<label for="dateFrom">From: </label>
+					<input id="dateFrom" class="datetime" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
+				</div>
+				<div class="dateOption">					
+					<label for="dateTo">To: </label>
+					<input id="dateTo" class="datetime" type="text" placeholder="Select Date.." data-id="datetime" readonly="readonly">
 				</div>
 			</div>
-			<div class="col-lg">
-				<h5>Blue Fish</h5>
-				<div class="crit-section">
-					<ul id="blue">
-						<li>
-							<input type="checkbox" class="btn-check" id="sothis" autocomplete="off" aria-labelledby="sothis-title">
-							<label class="btn" for="sothis">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028009.png"></div>	
-									<div class="col" id="sothis-title">Sothis</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="coralmanta" autocomplete="off" aria-labelledby="coralmanta-title">
-							<label class="btn" for="coralmanta">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028010.png"></div>	
-									<div class="col" id="coralmanta-title">Coral Manta</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="stonescale" autocomplete="off" aria-labelledby="stonescale-title">
-							<label class="btn" for="stonescale">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028011.png"></div>	
-									<div class="col" id="stonescale-title">Stonescale</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="elasmosaurus" autocomplete="off" aria-labelledby="elasmosaurus-title">
-							<label class="btn" for="elasmosaurus">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028012.png"></div>	
-									<div class="col" id="elasmosaurus-title">Elasmosaurus</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="hafgufa" autocomplete="off" aria-labelledby="hafgufa-title">
-							<label class="btn" for="hafgufa">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028030.png"></div>	
-									<div class="col" id="hafgufa-title">Hafgufa</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="placodus" autocomplete="off" aria-labelledby="placodus-title">
-							<label class="btn" for="placodus">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028031.png"></div>	
-									<div class="col" id="placodus-title">Placodus</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="seafaringtoad" autocomplete="off" aria-labelledby="seafaringtoad-title">
-							<label class="btn" for="seafaringtoad">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028032.png"></div>	
-									<div class="col" id="seafaringtoad-title">Seafaring Toad</div>
-									<div class="col-auto">
-										<i class="material-icons theme">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="col-lg">
-				<h5>Achievements</h5>
-				<div class="crit-section">
-					<ul id="achievements">
-						<li>
-							<input type="checkbox" class="btn-check" id="octo" autocomplete="off" aria-labelledby="octo-title">
-							<label class="btn" for="octo">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065913.png"></div>	
-									<div class="col" id="octo-title">Octopus Traveler</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="shark" autocomplete="off" aria-labelledby="shark-title">
-							<label class="btn" for="shark">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065914.png"></div>	
-									<div class="col" id="shark-title">Shark Hunter</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="jelly" autocomplete="off" aria-labelledby="jelly-title">
-							<label class="btn" for="jelly">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065915.png"></div>	
-									<div class="col" id="jelly-title">Jellyfish Fanatic</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="dragon" autocomplete="off" aria-labelledby="dragon-title">
-							<label class="btn" for="dragon">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065916.png"></div>	
-									<div class="col" id="dragon-title">Sea Dragoon</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="puffer" autocomplete="off" aria-labelledby="puffer-title">
-							<label class="btn" for="puffer">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065917.png"></div>	
-									<div class="col" id="puffer-title">Balloon Catcher</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="crab" autocomplete="off" aria-labelledby="crab-title">
-							<label class="btn" for="crab">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065918.png"></div>	
-									<div class="col" id="crab-title">Deadliest Catcher</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="manta" autocomplete="off" aria-labelledby="manta-title">
-							<label class="btn" for="manta">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065919.png"></div>	
-									<div class="col" id="manta-title">Manta Maniac</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-						<li>
-							<input type="checkbox" class="btn-check" id="points" autocomplete="off" aria-labelledby="points-title">
-							<label class="btn" for="points">
-								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065902.png"></div>	
-									<div class="col" id="points-title">Master of the Sea</div>
-									<div class="col-auto">
-										<i class="material-icons">add_circle</i>
-									</div>						
-								</div>
-							</label>
-						</li>
-					</ul>
-				</div>
-			</div>
+
+			<select class="selectpicker">
+				<option>Mustard</option>
+				<option>Ketchup</option>
+				<option>Barbecue</option>
+			</select>
+
+			<button type="submit" id="formSubmit" form="routeForm">Find Routes</button>
+		</form>
+
+		<div id="results">
+			<table>
+				<thead>
+					<tr>
+						<th>Route</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+			</table>
 		</div>
-	</div>
 
-
-	<form id="routeForm">
-		<h3>Select Times and Dates</h3>
-		<div class="range">
-			<div class="dateOption">
-				<label for="dateFrom">From: </label>
-				<input id="dateFrom" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
-					readonly="readonly">
-			</div>
-			<div class="dateOption">
-				<label for="dateTo">To: </label>
-				<input id="dateTo" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
-					readonly="readonly">
-			</div>
+		<div id="footer">
+			<a href="https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster.git"><img src="img/simple-icons/github.svg" title="See it on Github" alt="See it on Github"></a>
 		</div>
-	</form>
-
-	<div id="results">
-		<table>
-			<thead>
-				<tr>
-					<th>Route</th>
-					<th>Time</th>
-				</tr>
-			</thead>
-			<tbody>
-
-			</tbody>
-		</table>
-	</div>
-
-	<div id="footer">
-		<a href="https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster.git"><img
-				src="img/simple-icons/github.svg" title="See it on Github" alt="See it on Github"></a>
-	</div>
-</body>
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-	integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-	crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@popperjs/core@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
-<script src="https://unpkg.com/dayjs@1.8.21/plugin/customParseFormat.js"></script>
-<script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
-<script>dayjs().format()</script> -->
-
-<script type="module" src="./src/main.ts" defer></script>
-
+	</body>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+	<script src="https://unpkg.com/dayjs@1.8.21/plugin/customParseFormat.js"></script>
+	<script>dayjs.extend(window.dayjs_plugin_customParseFormat)</script>
+	<script>dayjs().format()</script>
+	
+	<script type="module" src="js/main.js" defer></script>
 </html>

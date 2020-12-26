@@ -1,20 +1,10 @@
-import * as rf from "./routeFinder.ts";
-var dayjs = require("dayjs");
-// var flatpickr = require("flatpickr");
-import $ from "jquery";
-// import "bootstrap";
-require("bootstrap");
-// import "bootstrap-select";
-// require("flatpickr");
-import flatpickr from "flatpickr";
-import parsedNames from '../data/routeNames.json';
-
+import * as rf from "./routeFinder.js";
 
 /* SETUP */
 // Invoking an IIFE in conjunction with <script defer> to ensure page is loaded first
-(async function() {
+(function() {
     // Set up reference routes array and reference route/time
-    await rf.setup();
+    rf.setup();
 
     // Generate default from and to datetimes
     const fromDate = dayjs();
@@ -35,7 +25,13 @@ import parsedNames from '../data/routeNames.json';
 })();
 
 // Validates form inputs on submit
-function evaluateCriteria(refRoute: rf.Anchor) {
+function formValidation(refRoute: rf.Anchor) {
+    // If no checkboxes are selected, return an error
+    if ($('input[type="checkbox"]').filter(':checked').length === 0) {
+        alert('No routes selected.');
+        return;
+    }
+
     // Browser seems to check if datetime-local is filled correctly, so I won't touch on that.
     // Check if start time is larger than end time
     const inputTimespan: rf.Period = getDateInputs();
@@ -71,7 +67,7 @@ function evaluateCriteria(refRoute: rf.Anchor) {
 }
 
 // Main function
-function getRoutes(refRoute: rf.Anchor) {
+function getSpecifiedRoutes(refRoute: rf.Anchor) {
     const inputKeys: string[] = getRouteInputs();
     var inputTimespan: rf.Period = getDateInputs();
     
@@ -82,17 +78,10 @@ function getRoutes(refRoute: rf.Anchor) {
 // Reads form route checkboxes
 function getRouteInputs() {
     var selectedRoutes: string[] = new Array();
-    $('#routeFilters input[type="checkbox"]').each(function() {
+    $('input[type="checkbox"]').each(function() {
         if ($(this).prop("checked"))
             selectedRoutes.push($(this).attr('id'));
     })
-
-    // If nothing is selected, default to displaying everything instead
-    if (selectedRoutes.length === 0) {
-        $('#routeFilters input[type="checkbox"]').each(function() {
-            selectedRoutes.push($(this).attr('id'));
-        })
-    }
 
     return selectedRoutes;
 }
@@ -158,12 +147,12 @@ $('#routeFilters').on('change', function(event) {
 
     const refRoute = rf.refRoute;
 
-    if(!evaluateCriteria(refRoute)) {
+    if(!formValidation(refRoute)) {
         return;
     }
 
     // Run main function
-    getRoutes(refRoute);
+    getSpecifiedRoutes(refRoute);
 })
 
 $('button#clearAll').on('click', function(event) {
@@ -176,24 +165,4 @@ $('button#clearRoute').on('click', function(event) {
 
 $('button#clearFish').on('click', function(event) {
     $('form #fishInputs input:checkbox').prop('checked', false);
-})
-
-$('#routeFilters input:checkbox').on('click', function(event) {
-    // Updates icon to correct status
-    if ($(this).prop('checked')) {
-        $(this).parent().find('i').text('remove_circle');
-    }
-    else {
-        $(this).parent().find('i').text('add_circle');    
-    }
-
-    // Runs route finder
-    const refRoute = rf.refRoute;
-
-    if(!evaluateCriteria(refRoute)) {
-        return;
-    }
-
-    // Run main function
-    getRoutes(refRoute);
 })

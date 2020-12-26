@@ -1,22 +1,6 @@
-/* THEME */
-.btn {
-  color: #E7E7E7 !important;
-}
-
-.btn .material-icons {
-  color: #6D3EEC;
-}
-
-.btn-menu {
-  background-color: #6D3EEC !important;
-}
-
-/* GENERAL */
 body {
-  background-color: #444444 !important;
   text-align: center;
   padding: 20px 40px;
-  color: #E7E7E7 !important;
 }
 
 #results {
@@ -39,105 +23,7 @@ body {
   border-radius: 0.25rem;
 }
 
-.table {
-  width: auto !important;
-}
-
-.blank {
-  height: 36px;
-}
-
 /* INPUT */
-#routeFilters table td > label {
-  cursor: pointer;
-  padding: 0;
-}
-
-#routeFilters ul {
-  text-align: left;
-  padding-left: 0;
-  margin: auto;
-  columns: 2;
-  -webkit-columns: 2;
-  -moz-columns: 2;
-}
-
-#routeFilters ul li {
-  margin-bottom: 0.1rem;
-  padding: 0.1rem;
-  width: 100%;
-  display: inline-block;
-}
-
-#routeFilters ul li > .btn {
-  display: -webkit-box !important;
-  display: -ms-flexbox !important;
-  display: flex !important;
-  padding: 0;
-  text-align: left;
-  border-radius: 0;
-  width: 100%;
-}
-
-#routeFilters ul li > .btn .row {
-  width: 100%;
-}
-
-#routeFilters ul li > .btn .row > * {
-  -ms-flex-item-align: center;
-      -ms-grid-row-align: center;
-      align-self: center;
-}
-
-#routeFilters ul li:nth-of-type(odd) {
-  background-color: #CCCCCC;
-}
-
-#routeFilters .crit-section {
-  border: 1px solid black;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-#routeFilters .crit-section > table > thead > tr > th.icon {
-  padding-bottom: 0.25rem;
-}
-
-#routeFilters img {
-  height: 32px;
-  padding-right: 0.25rem;
-}
-
-.test {
-  border: 1px solid black;
-}
-
-ul.test-list {
-  columns: 2;
-  -webkit-columns: 2;
-  -moz-columns: 2;
-}
-
-ul.test-list > li {
-  display: inline-block;
-  width: 100%;
-}
-
-.test-col {
-  columns: 2;
-  -webkit-columns: 2;
-  -moz-columns: 2;
-}
-
-.test-col > div {
-  border: 1px solid black;
-}
-
-.b-test {
-  width: 100%;
-  padding: 0;
-}
-
 form {
   margin: auto;
   margin-bottom: 1rem;
@@ -152,32 +38,22 @@ ul {
   text-align: left;
 }
 
-#routeInputs {
+ul#routeInputs {
+  text-align: left;
   margin: auto;
-}
-
-#routeInputs > table {
-  width: auto !important;
-}
-
-#routeInputs > table th {
-  min-width: 5rem;
-}
-
-.routetime {
-  -webkit-box-flex: 1;
-      -ms-flex: 1 0 0%;
-          flex: 1 0 0%;
-  min-width: 48px;
+  max-width: 760px;
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
 }
 
 ul#fishInputs {
   text-align: left;
   margin: auto;
   max-width: 760px;
-  columns: 2;
-  -webkit-columns: 2;
-  -moz-columns: 2;
+  columns: 4;
+  -webkit-columns: 4;
+  -moz-columns: 4;
 }
 
 li {
@@ -193,11 +69,6 @@ button {
   margin-top: 1rem;
   margin-right: 0.25rem;
   margin-left: 0.25rem;
-}
-
-.dateOption {
-  display: inline-block;
-  margin: 0 2rem;
 }
 
 /* OUTPUT */

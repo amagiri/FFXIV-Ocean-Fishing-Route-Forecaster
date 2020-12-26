@@ -34,7 +34,7 @@
     },
     {
         "name": "manta",
-        "routes": ["nightBloodbrine"]
+        "routes": ["dayRothlyt", "nightBloodbrine"]
     },
     {
         "name": "day",
@@ -69,15 +69,11 @@
 		"routes": ["sunsetRothlyt", "sunsetBloodbrine"]
 	},
 	{
-		"name": "seafaringtoad",
+		"name": "seafaring-toad",
 		"routes": ["dayBloodbrine"]
 	},
 	{
 		"name": "placodus",
 		"routes": ["sunsetRothlyt"]
-    },
-    {
-        "name": "points",
-        "routes": ["dayRhotano"]
-    }]
+	}]
 }
