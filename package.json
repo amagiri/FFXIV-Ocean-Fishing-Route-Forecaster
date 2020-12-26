@@ -26,7 +26,6 @@
     "@types/jquery": "^3.5.5",
     "@types/node": "^14.14.16",
     "bootstrap": "^4.5.3",
-    "bootstrap-select": "^1.13.18",
     "dayjs": "^1.9.7",
     "flatpickr": "^4.6.9",
     "jquery": "^3.5.1",
