@@ -19,15 +19,17 @@ import parsedNames from '../data/routeNames.json';
     // Generate default from and to datetimes
     const fromDate = dayjs();
     const jsFromDate: Date = fromDate.toDate();
-    $('#dateFrom').flatpickr({enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K"});
+    // $('#dateFrom').flatpickr({enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K"});
+    flatpickr('#dateFrom', {enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K"});
 
     const addedDays = 7; 
     const toDate = fromDate.add(addedDays, 'day');
     const jsToDate: Date = toDate.toDate();
-    $('#dateTo').flatpickr({enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K"});
+    // $('#dateTo').flatpickr({enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K"});
+    flatpickr('#dateTo', {enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K"});
 
     // Run route finder with default settings
-    const refRoute = rf.refRoute; // <-- CURRENTLY COMING IN AS UNDEFINED
+    const refRoute = rf.refRoute;
 
     getRoutes(refRoute);
 })();
@@ -40,10 +42,11 @@ function evaluateCriteria(refRoute: rf.Anchor) {
     if (inputTimespan.end.diff(inputTimespan.start) < 0) {
         alert('Start time is larger than end time. Updating start date.')
 
-        const fromInput = document.querySelector('#dateFrom')._flatpickr;
-        const toInput = document.querySelector('#dateTo')._flatpickr;
+        const fromInput = flatpickr('#dateFrom', {});
+        const toInput = flatpickr('#dateTo', {});
 
-        fromInput.setDate(toInput.selectedDates);
+        fromInput.setDate(toInput.selectedDates, true, "m-d-Y h:i K");
+
         return false;
     }
 
@@ -51,12 +54,12 @@ function evaluateCriteria(refRoute: rf.Anchor) {
         alert('One or more of these dates is not supported. Updating dates.');
 
         if (inputTimespan.start.diff(refRoute.datetime) < 0) {
-            const fromInput = document.querySelector('#dateFrom')._flatpickr;
+            const fromInput = flatpickr('#dateFrom', {});
             fromInput.setDate(dayjs().toDate());  // Sets start time to current time
         }
 
         if (inputTimespan.end.diff(refRoute.datetime) < 0) {
-            const toInput = document.querySelector('#dateTo')._flatpickr;
+            const toInput = flatpickr('#dateTo', {});
             toInput.setDate(dayjs().toDate());  // Sets start time to current time
         }
         
@@ -110,8 +113,8 @@ async function displayRoutes(results: rf.Solution[]) {
     // Import JSON for mapping keys to display names
     var nameMap = new Map<string, string>(); // Store a mapping of keywords to display names
     try {
-        const nameResponse = await fetch('data/routeNames.json');
-        const parsedNames = await nameResponse.json();
+        // const nameResponse = await fetch('data/routeNames.json');
+        // const parsedNames = await nameResponse.json();
         mapDisplayNames(parsedNames, nameMap);
     } catch (error) {
         console.error(error);
@@ -150,7 +153,7 @@ interface NameKeyPair {
 
 
 /* EVENT LISTENERS */
-$('#routeForm').on('submit', function(event) {
+$('#routeFilters').on('change', function(event) {
     event.preventDefault();
 
     const refRoute = rf.refRoute;

@@ -9,8 +9,8 @@ export var refRoute: Anchor; // Stores a baseline Route that everything else wil
 export async function setup() {
     // Import route options JSON
     try {
-        const routeResponse = await fetch('data/routeKeys.json');
-        var parsedKeys = await routeResponse.json();
+        // const routeResponse = await fetch('data/routeKeys.json');
+        // var parsedKeys = await routeResponse.json();
         mapRouteIdentifiers(parsedKeys);
 
         refRoute = new Anchor("dayBloodbrine", "2020-12-08T16:00:00.000Z"); // Sets anchor time and route with which everything will be calculated
