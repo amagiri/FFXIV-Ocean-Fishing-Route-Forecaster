@@ -1,3 +1,5 @@
+import parsedKeys from '../data/routeKeys.json';
+var dayjs = require("dayjs");
 var routeMap = new Map<string, string[]>();  // Stores a mapping of criteria to keywords
 export var refRoute: Anchor; // Stores a baseline Route that everything else will be calculated off of
 

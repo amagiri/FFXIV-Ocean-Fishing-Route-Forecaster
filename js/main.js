@@ -36,20 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import * as rf from "./routeFinder.js";
 (function () {
-    rf.setup();
-    var fromDate = dayjs();
-    var jsFromDate = fromDate.toDate();
-    $('#dateFrom').flatpickr({ enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K" });
-    var addedDays = 7;
-    var toDate = fromDate.add(addedDays, 'day');
-    var jsToDate = toDate.toDate();
-    $('#dateTo').flatpickr({ enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K" });
+    return __awaiter(this, void 0, void 0, function () {
+        var fromDate, jsFromDate, addedDays, toDate, jsToDate, refRoute;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, rf.setup()];
+                case 1:
+                    _a.sent();
+                    fromDate = dayjs();
+                    jsFromDate = fromDate.toDate();
+                    $('#dateFrom').flatpickr({ enableTime: true, defaultDate: jsFromDate, dateFormat: "m-d-Y h:i K" });
+                    addedDays = 7;
+                    toDate = fromDate.add(addedDays, 'day');
+                    jsToDate = toDate.toDate();
+                    $('#dateTo').flatpickr({ enableTime: true, defaultDate: jsToDate, dateFormat: "m-d-Y h:i K" });
+                    refRoute = rf.refRoute;
+                    getRoutes(refRoute);
+                    return [2];
+            }
+        });
+    });
 })();
-function formValidation(refRoute) {
-    if ($('input[type="checkbox"]').filter(':checked').length === 0) {
-        alert('No routes selected.');
-        return;
-    }
+function evaluateCriteria(refRoute) {
     var inputTimespan = getDateInputs();
     if (inputTimespan.end.diff(inputTimespan.start) < 0) {
         alert('Start time is larger than end time. Updating start date.');
@@ -72,7 +80,7 @@ function formValidation(refRoute) {
     }
     return true;
 }
-function getSpecifiedRoutes(refRoute) {
+function getRoutes(refRoute) {
     var inputKeys = getRouteInputs();
     var inputTimespan = getDateInputs();
     var validRoutes = rf["default"](refRoute, inputKeys, inputTimespan);
@@ -80,10 +88,15 @@ function getSpecifiedRoutes(refRoute) {
 }
 function getRouteInputs() {
     var selectedRoutes = new Array();
-    $('input[type="checkbox"]').each(function () {
+    $('#routeFilters input[type="checkbox"]').each(function () {
         if ($(this).prop("checked"))
             selectedRoutes.push($(this).attr('id'));
     });
+    if (selectedRoutes.length === 0) {
+        $('#routeFilters input[type="checkbox"]').each(function () {
+            selectedRoutes.push($(this).attr('id'));
+        });
+    }
     return selectedRoutes;
 }
 function getDateInputs() {
@@ -138,10 +151,10 @@ function mapDisplayNames(parsedNames, nameMap) {
 $('#routeForm').on('submit', function (event) {
     event.preventDefault();
     var refRoute = rf.refRoute;
-    if (!formValidation(refRoute)) {
+    if (!evaluateCriteria(refRoute)) {
         return;
     }
-    getSpecifiedRoutes(refRoute);
+    getRoutes(refRoute);
 });
 $('button#clearAll').on('click', function (event) {
     $('form input:checkbox').prop('checked', false);
@@ -151,5 +164,18 @@ $('button#clearRoute').on('click', function (event) {
 });
 $('button#clearFish').on('click', function (event) {
     $('form #fishInputs input:checkbox').prop('checked', false);
+});
+$('#routeFilters input:checkbox').on('click', function (event) {
+    if ($(this).prop('checked')) {
+        $(this).parent().find('i').text('remove_circle');
+    }
+    else {
+        $(this).parent().find('i').text('add_circle');
+    }
+    var refRoute = rf.refRoute;
+    if (!evaluateCriteria(refRoute)) {
+        return;
+    }
+    getRoutes(refRoute);
 });
 //# sourceMappingURL=main.js.map

@@ -1,6 +1,29 @@
+@import '~bootstrap/dist/css/bootstrap.min';
+@import '~bootstrap-select/dist/css/bootstrap-select.min';
+@import '~flatpickr/dist/flatpickr.min';
+
+/* THEME */
+$button: #6D3EEC;
+$text-color: #E7E7E7 !important;
+
+.btn {
+    color: $text-color;
+
+    .material-icons {
+        color: $button;
+    }
+}
+
+.btn-menu {
+    background-color: $button !important;
+}
+
+/* GENERAL */
 body {
+    background-color: #444444 !important;
     text-align: center;
     padding: 20px 40px;
+    color: $text-color;
 }
 
 #results {
@@ -21,55 +44,171 @@ body {
     }
 }
 
+.table {
+    width: auto !important;
+}
+
+.blank {
+    height: 36px;
+}
 
 /* INPUT */
+#routeFilters {
+    table {
+        td {
+            > label {
+                cursor: pointer;
+                padding: 0;
+            }
+        }
+    }
+
+    ul {
+        text-align: left;
+        padding-left: 0;
+        margin: auto;
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+
+        // :after {
+        //     content: '';
+        //     width: 100%;
+        //     display: inline-block;
+        // }
+
+        li {
+            margin-bottom: 0.1rem;
+            padding: 0.1rem;
+            width: 100%;
+            display: inline-block;
+
+            > .btn {
+                display: flex !important;
+                padding: 0;
+                text-align: left;
+                border-radius: 0;
+                width: 100%;
+
+                .row {
+                    width: 100%;
+                }
+
+                .row > * {
+                    align-self: center;
+                }
+            }
+        }
+
+        li:nth-of-type(odd) {
+            background-color: #CCCCCC;
+        }
+    }
+
+    .crit-section {
+        border: 1px solid black;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+
+        > table > thead > tr > th.icon {
+            padding-bottom: 0.25rem;
+        }
+    }
+
+    img {
+        height: 32px;
+        padding-right: 0.25rem;
+    }
+}
+
+.test {
+    border: 1px solid black;
+}
+
+ul.test-list {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+
+    > li {
+        display: inline-block;
+        width: 100%;
+    }
+}
+
+.test-col {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    
+    > div {
+        border: 1px solid black;
+    }
+}
+
+.b-test {
+    width: 100%;
+    padding: 0;
+}
+
 form {
     margin: auto;
     margin-bottom: 1rem;
     padding: 0.5rem;
 }
-
+  
 .route {
     margin-bottom: 2rem;
 }
-
+  
 ul {
     text-align: left;
 }
-
-ul#routeInputs {
-    text-align: left;
+  
+#routeInputs {
     margin: auto;
-    max-width: 760px;
 
-    columns: 3;
-    -webkit-columns: 3;
-    -moz-columns: 3;
+    > table {
+        width: auto !important;
+
+        th {
+            min-width: 5rem;
+        }
+    }
 }
-
+  
+.routetime {
+    flex: 1 0 0%;
+    min-width: 48px;
+}
+  
 ul#fishInputs {
     text-align: left;
     margin: auto;
     max-width: 760px;
-    
-    columns: 4;
-    -webkit-columns: 4;
-    -moz-columns: 4;
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
 }
-
+  
 li {
     list-style-type: none;
+}
+  
+.dateOption {
+    display: inline-block;
+    margin: 0 2rem;
+}
+  
+button {
+    margin-top: 1rem;
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
 }
 
 .dateOption {
     display: inline-block;
     margin: 0 2rem;
-}
-
-button {
-    margin-top: 1rem;
-    margin-right: 0.25rem;
-    margin-left: 0.25rem;
 }
 
 
