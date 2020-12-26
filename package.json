@@ -1,0 +1,37 @@
+{
+  "name": "ffxiv-ocean-fishing-route-forecaster",
+  "version": "1.0.0",
+  "description": "Outputs the ocean fishing schedule for a date range and routes specified by the user",
+  "main": "namazu",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "module",
+    "url": "git+https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster.git"
+  },
+  "author": "amagiri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster/issues"
+  },
+  "homepage": "https://github.com/amagiri/FFXIV-Ocean-Fishing-Route-Forecaster#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.10",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.6.0",
+    "@types/jquery": "^3.5.5",
+    "@types/node": "^14.14.16",
+    "bootstrap": "^4.5.3",
+    "bootstrap-select": "^1.13.18",
+    "dayjs": "^1.9.7",
+    "flatpickr": "^4.6.9",
+    "jquery": "^3.5.1",
+    "material-design-icons": "^3.0.1",
+    "popper.js": "^1.16.1",
+    "xivapi-js": "^0.3.0"
+  }
+}
