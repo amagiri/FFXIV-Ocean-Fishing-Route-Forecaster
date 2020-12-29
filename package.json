@@ -29,7 +29,6 @@
     "dayjs": "^1.9.7",
     "flatpickr": "^4.6.9",
     "jquery": "^3.5.1",
-    "material-design-icons": "^3.0.1",
     "popper.js": "^1.16.1",
     "xivapi-js": "^0.3.0"
   }

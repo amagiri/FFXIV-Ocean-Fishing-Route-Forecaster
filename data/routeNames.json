@@ -1,27 +1,27 @@
 {
     "names": [{
         "key": "sunsetMerlthor",
-        "displayname": "Northern by Sunset (Dragon)"
+        "displayname": "Northern by Sunset"
     },
     {
         "key": "nightMerlthor",
-        "displayname": "Northern by Night (Octo)"
+        "displayname": "Northern by Night"
     },
     {
         "key": "dayMerlthor",
-        "displayname": "Northern by Day (Blue-3)"
+        "displayname": "Northern by Day"
     },
     {
         "key": "sunsetRhotano",
-        "displayname": "Rhotano by Sunset (Blue-4)"
+        "displayname": "Rhotano by Sunset"
     },
     {
         "key": "nightRhotano",
-        "displayname": "Rhotano by Night (Jelly)"
+        "displayname": "Rhotano by Night"
     },
     {
         "key": "dayRhotano",
-        "displayname": "Rhotano by Day (Shark)"
+        "displayname": "Rhotano by Day"
     },
 	{
 		"key": "sunsetBloodbrine",
@@ -29,11 +29,11 @@
 	},
 	{
 		"key": "nightBloodbrine",
-		"displayname": "Bloodbrine by Night (Manta)"
+		"displayname": "Bloodbrine by Night"
 	},
 	{
 		"key": "dayBloodbrine",
-		"displayname": "Bloodbrine by Day (Crab)"
+		"displayname": "Bloodbrine by Day"
 	},
 		{
 		"key": "sunsetRothlyt",
@@ -41,10 +41,10 @@
 	},
 	{
 		"key": "nightRothlyt",
-		"displayname": "Rothlyt by Night (Puffer)"
+		"displayname": "Rothlyt by Night"
 	},
 	{
 		"key": "dayRothlyt",
-		"displayname": "Rothlyt by Day (Manta)"
+		"displayname": "Rothlyt by Day"
 	}]
 }

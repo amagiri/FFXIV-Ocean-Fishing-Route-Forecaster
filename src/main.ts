@@ -50,6 +50,10 @@ function evaluateCriteria(refRoute: rf.Anchor) {
         return false;
     }
 
+    if (rf.isTimeValid(refRoute.datetime, inputTimespan.start)) {
+        alert('test');
+    }
+
     if (inputTimespan.start.diff(refRoute.datetime) < 0 || inputTimespan.end.diff(refRoute.datetime) < 0) {
         alert('One or more of these dates is not supported. Updating dates.');
 
@@ -153,7 +157,7 @@ interface NameKeyPair {
 
 
 /* EVENT LISTENERS */
-$('#routeFilters').on('change', function(event) {
+$('#datetime').on('change', function(event) {
     event.preventDefault();
 
     const refRoute = rf.refRoute;
@@ -166,17 +170,17 @@ $('#routeFilters').on('change', function(event) {
     getRoutes(refRoute);
 })
 
-$('button#clearAll').on('click', function(event) {
-    $('form input:checkbox').prop('checked', false);
-})
+// $('button#clearAll').on('click', function(event) {
+//     $('form input:checkbox').prop('checked', false);
+// })
 
-$('button#clearRoute').on('click', function(event) {
-    $('form #routeInputs input:checkbox').prop('checked', false);
-})
+// $('button#clearRoute').on('click', function(event) {
+//     $('form #routeInputs input:checkbox').prop('checked', false);
+// })
 
-$('button#clearFish').on('click', function(event) {
-    $('form #fishInputs input:checkbox').prop('checked', false);
-})
+// $('button#clearFish').on('click', function(event) {
+//     $('form #fishInputs input:checkbox').prop('checked', false);
+// })
 
 $('#routeFilters input:checkbox').on('click', function(event) {
     // Updates icon to correct status
@@ -188,12 +192,40 @@ $('#routeFilters input:checkbox').on('click', function(event) {
     }
 
     // Runs route finder
-    const refRoute = rf.refRoute;
+    getRoutes(rf.refRoute);
+})
 
-    if(!evaluateCriteria(refRoute)) {
-        return;
+$('#routes button').on('click', function(event) {
+    const keyName = $(this).attr('id');
+
+    const $selection = $('#routes input:checkbox').filter(function(index) {
+        const id = $(this).attr('id');
+        const name = id.toLowerCase();
+
+        if (name.includes(keyName)) {
+            return true;
+        }
+    })
+
+    var allChecked = true;
+    $selection.each(function() {
+        if (!$(this).prop('checked')) {
+            allChecked = false;
+        }
+    })
+
+    // If all are checked, then uncheck everything
+    if (allChecked) {
+        $selection.each(function() {
+            $(this).prop('checked', false);
+            $(this).parent().find('i').text('add_circle');   
+        })
     }
-
-    // Run main function
-    getRoutes(refRoute);
+    // If none or some are checked, check everything
+    else {
+        $selection.each(function() {
+            $(this).prop('checked', true);
+            $(this).parent().find('i').text('remove_circle');
+        })
+    }
 })

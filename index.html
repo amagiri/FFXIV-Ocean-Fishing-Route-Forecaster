@@ -4,17 +4,15 @@
 	<meta charset="UTF-8">
 	<title>FFXIV Ocean Fishing Route Forecaster</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com/ https://fonts.gstatic.com/;
-				 script-src 'self' https://code.jquery.com/ https://unpkg.com/ https://cdn.jsdelivr.net 'unsafe-inline'" />
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com/ https://fonts.gstatic.com/;
+				 script-src 'self' 'unsafe-inline';" />
 
 	<link rel="stylesheet" href="./src/main.scss">
 	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-	<link rel="stylesheet"
-		href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet"> -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css"> -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
 
 <body>
@@ -39,21 +37,36 @@
 	</p>
 	<div id="routeFilters" class="collapse">
 		<div class="row g-2">
+			<div class="col-lg-12">
+				<h5>Time and Date</h5>
+				<div id="datetime" class="crit-section">
+					<div class="dateOption">
+						<label for="dateFrom">From: </label>
+						<input id="dateFrom" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
+							readonly="readonly">
+					</div>
+					<div class="dateOption">
+						<label for="dateTo">To: </label>
+						<input id="dateTo" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
+							readonly="readonly">
+					</div>
+				</div>
+			</div>
 			<div class="col-lg">
 				<h5>Routes</h5>
-				<div class="crit-section">
+				<div id="routes" class="crit-section">
 					<table class="table table-hover table-striped text-center">
 						<thead>
 							<tr>
 								<th scope="col">Route</th>
-								<th scope="col" class="icon"><img src="./img/weather-icons/wi-day-sunny.svg"></th>
-								<th scope="col" class="icon"><img src="img/weather-icons/wi-horizon.svg"></th>
-								<th scope="col" class="icon"><img src="img/weather-icons/wi-night-clear.svg"></th>
+								<th scope="col" class="icon"><button id="day" class="btn"><img src="./img/weather-icons/wi-day-sunny.svg"></button></th>
+								<th scope="col" class="icon"><button id="sunset" class="btn"><img src="./img/weather-icons/wi-horizon.svg"></button></th>
+								<th scope="col" class="icon"><button id="night" class="btn"><img src="./img/weather-icons/wi-night-clear.svg"></button></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<th scope="row" class="text-end align-middle">Open Bloodbrine Sea</th>
+								<th scope="row" class="text-end align-middle"><button id="bloodbrine" class="btn">Open Bloodbrine Sea</button></th>
 								<td class="align-middle">
 									<input type="checkbox" class="btn-check" id="dayBloodbrine" autocomplete="off" aria-labelledby="dayBloodbrine-title">
 									<label class="btn" for="dayBloodbrine">
@@ -77,7 +90,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="text-end align-middle">Outer Rothlyt Sound</th>
+								<th scope="row" class="text-end align-middle"><button id="rothlyt" class="btn">Outer Rothlyt Sound</button></th>
 								<td class="align-middle">
 									<input type="checkbox" class="btn-check" id="dayRothlyt" autocomplete="off" aria-labelledby="dayRothlyt-title">
 									<label class="btn" for="dayRothlyt">
@@ -101,7 +114,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="text-end align-middle">Northern Strait of Merlthor</th>
+								<th scope="row" class="text-end align-middle"><button id="merlthor" class="btn">Northern Strait of Merlthor</button></th>
 								<td class="align-middle">
 									<input type="checkbox" class="btn-check" id="dayMerlthor" autocomplete="off" aria-labelledby="dayMerlthor-title">
 									<label class="btn" for="dayMerlthor">
@@ -125,7 +138,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="text-end align-middle">Open Rhotano Sea</th>
+								<th scope="row" class="text-end align-middle"><button id="rhotano" class="btn">Open Rhotano Sea</button></th>
 								<td class="align-middle">
 									<input type="checkbox" class="btn-check" id="dayRhotano" autocomplete="off" aria-labelledby="dayRhotano-title">
 									<label class="btn" for="dayRhotano">
@@ -154,13 +167,13 @@
 			</div>
 			<div class="col-lg">
 				<h5>Blue Fish</h5>
-				<div class="crit-section">
-					<ul id="blue">
+				<div id="blue-fish" class="crit-section">
+					<ul>
 						<li>
 							<input type="checkbox" class="btn-check" id="sothis" autocomplete="off" aria-labelledby="sothis-title">
 							<label class="btn" for="sothis">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028009.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028009.png"></div>
 									<div class="col" id="sothis-title">Sothis</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -172,7 +185,7 @@
 							<input type="checkbox" class="btn-check" id="coralmanta" autocomplete="off" aria-labelledby="coralmanta-title">
 							<label class="btn" for="coralmanta">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028010.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028010.png"></div>
 									<div class="col" id="coralmanta-title">Coral Manta</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -184,7 +197,7 @@
 							<input type="checkbox" class="btn-check" id="stonescale" autocomplete="off" aria-labelledby="stonescale-title">
 							<label class="btn" for="stonescale">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028011.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028011.png"></div>
 									<div class="col" id="stonescale-title">Stonescale</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -196,7 +209,7 @@
 							<input type="checkbox" class="btn-check" id="elasmosaurus" autocomplete="off" aria-labelledby="elasmosaurus-title">
 							<label class="btn" for="elasmosaurus">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028012.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028012.png"></div>
 									<div class="col" id="elasmosaurus-title">Elasmosaurus</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -208,7 +221,7 @@
 							<input type="checkbox" class="btn-check" id="hafgufa" autocomplete="off" aria-labelledby="hafgufa-title">
 							<label class="btn" for="hafgufa">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028030.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028030.png"></div>
 									<div class="col" id="hafgufa-title">Hafgufa</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -220,7 +233,7 @@
 							<input type="checkbox" class="btn-check" id="placodus" autocomplete="off" aria-labelledby="placodus-title">
 							<label class="btn" for="placodus">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028031.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028031.png"></div>
 									<div class="col" id="placodus-title">Placodus</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -232,7 +245,7 @@
 							<input type="checkbox" class="btn-check" id="seafaringtoad" autocomplete="off" aria-labelledby="seafaringtoad-title">
 							<label class="btn" for="seafaringtoad">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/fish/028032.png"></div>
+									<div class="col-auto"><img src="./img/assets/fish/028032.png"></div>
 									<div class="col" id="seafaringtoad-title">Seafaring Toad</div>
 									<div class="col-auto">
 										<i class="material-icons theme">add_circle</i>
@@ -245,13 +258,13 @@
 			</div>
 			<div class="col-lg">
 				<h5>Achievements</h5>
-				<div class="crit-section">
-					<ul id="achievements">
+				<div id="achievements" class="crit-section">
+					<ul>
 						<li>
 							<input type="checkbox" class="btn-check" id="octo" autocomplete="off" aria-labelledby="octo-title">
 							<label class="btn" for="octo">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065913.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065913.png"></div>
 									<div class="col" id="octo-title">Octopus Traveler</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -263,7 +276,7 @@
 							<input type="checkbox" class="btn-check" id="shark" autocomplete="off" aria-labelledby="shark-title">
 							<label class="btn" for="shark">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065914.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065914.png"></div>
 									<div class="col" id="shark-title">Shark Hunter</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -275,7 +288,7 @@
 							<input type="checkbox" class="btn-check" id="jelly" autocomplete="off" aria-labelledby="jelly-title">
 							<label class="btn" for="jelly">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065915.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065915.png"></div>
 									<div class="col" id="jelly-title">Jellyfish Fanatic</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -287,7 +300,7 @@
 							<input type="checkbox" class="btn-check" id="dragon" autocomplete="off" aria-labelledby="dragon-title">
 							<label class="btn" for="dragon">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065916.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065916.png"></div>
 									<div class="col" id="dragon-title">Sea Dragoon</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -299,7 +312,7 @@
 							<input type="checkbox" class="btn-check" id="puffer" autocomplete="off" aria-labelledby="puffer-title">
 							<label class="btn" for="puffer">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065917.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065917.png"></div>
 									<div class="col" id="puffer-title">Balloon Catcher</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -311,7 +324,7 @@
 							<input type="checkbox" class="btn-check" id="crab" autocomplete="off" aria-labelledby="crab-title">
 							<label class="btn" for="crab">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065918.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065918.png"></div>
 									<div class="col" id="crab-title">Deadliest Catcher</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -323,7 +336,7 @@
 							<input type="checkbox" class="btn-check" id="manta" autocomplete="off" aria-labelledby="manta-title">
 							<label class="btn" for="manta">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065919.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065919.png"></div>
 									<div class="col" id="manta-title">Manta Maniac</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -335,7 +348,7 @@
 							<input type="checkbox" class="btn-check" id="points" autocomplete="off" aria-labelledby="points-title">
 							<label class="btn" for="points">
 								<div class="row g-0">
-									<div class="col-auto"><img src="img/assets/bonuses/065902.png"></div>
+									<div class="col-auto"><img src="./img/assets/bonuses/065902.png"></div>
 									<div class="col" id="points-title">Master of the Sea</div>
 									<div class="col-auto">
 										<i class="material-icons">add_circle</i>
@@ -348,23 +361,6 @@
 			</div>
 		</div>
 	</div>
-
-
-	<form id="routeForm">
-		<h3>Select Times and Dates</h3>
-		<div class="range">
-			<div class="dateOption">
-				<label for="dateFrom">From: </label>
-				<input id="dateFrom" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
-					readonly="readonly">
-			</div>
-			<div class="dateOption">
-				<label for="dateTo">To: </label>
-				<input id="dateTo" class="datetime" type="text" placeholder="Select Date.." data-id="datetime"
-					readonly="readonly">
-			</div>
-		</div>
-	</form>
 
 	<div id="results">
 		<table>
